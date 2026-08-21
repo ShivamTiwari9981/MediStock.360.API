@@ -1,0 +1,6 @@
+@MediStock360.API_HostAddress = http://localhost:5110
+
+GET {{MediStock360.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
