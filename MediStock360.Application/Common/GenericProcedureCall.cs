@@ -10,9 +10,8 @@ namespace MediStock360.Application.Common
         public static class StoredProcedure
         {
             public const string sp_GenerateMasterCode = "sp_GenerateMasterCode";
-            public const string Sp_Sign_Up = "Sp_Sign_Up";
+            public const string sp_RegisterClientUser = "sp_RegisterClientUser";
             public const string Sp_User_Login = "Sp_User_Login";
-            public const string Sp_Register_Client = "Sp_Register_Client";
             public const string sp_AssignRolePermissions_TVP = "sp_AssignRolePermissions_TVP";
             public const string sp_AssignBulkUserRoles = "sp_AssignBulkUserRoles";
             public const string sp_GetUserRolePermissions = "sp_GetUserRolePermissions";

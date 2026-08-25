@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class User
 {
@@ -9,11 +9,9 @@ public partial class User
 
     public long ClientId { get; set; }
 
-    public long? StoreId { get; set; }
-
     public Guid UserKey { get; set; }
 
-    public string? EmployeeCode { get; set; }
+    public long? EmployeeId { get; set; }
 
     public string FirstName { get; set; } = null!;
 
@@ -21,11 +19,13 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 
     public string UserName { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
+
+    public string UserSalt { get; set; } = null!;
 
     public bool IsActive { get; set; }
 
@@ -43,9 +43,11 @@ public partial class User
 
     public long? UpdatedBy { get; set; }
 
+    public bool? IsSynced { get; set; }
+
     public virtual Client Client { get; set; } = null!;
 
-    public virtual Store? Store { get; set; }
+    public virtual ICollection<UserOtp> UserOtps { get; set; } = new List<UserOtp>();
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

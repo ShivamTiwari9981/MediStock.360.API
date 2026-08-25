@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -7,15 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ExtensionMapper\" />
-    <Folder Include="Mappings\" />
-    <Folder Include="Validators\" />
+    <Compile Remove="ExtensionMapper\**" />
+    <Compile Remove="Mappings\**" />
+    <Compile Remove="Validators\**" />
+    <EmbeddedResource Remove="ExtensionMapper\**" />
+    <EmbeddedResource Remove="Mappings\**" />
+    <EmbeddedResource Remove="Validators\**" />
+    <None Remove="ExtensionMapper\**" />
+    <None Remove="Mappings\**" />
+    <None Remove="Validators\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.12" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.9" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.11" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,9 +1,10 @@
-﻿
+using MediStock360.Infrastructure.Interfaces;
 using MediStock360.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data.Common;
+using MediStock360.Infrastructure;
 
-namespace MediStock360.Infrastructure.Interfaces
+namespace MediStock360.Domain.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -11,6 +12,8 @@ namespace MediStock360.Infrastructure.Interfaces
         IGenericRepository<User> UserRepository { get; }
         IGenericRepository<UserRole> UserRoleRepository { get; }
         IGenericRepository<Role> RoleRepository { get; }
+        IGenericRepository<RolePermission> RolePermissionRepository { get; }
+        IGenericRepository<Permission> PermissionRepository { get; }
         IGenericRepository<Permission> PerimssionRepository { get; }
         IGenericRepository<BusinessType> BusinessTypeRepository { get; }
         IGenericRepository<City> CityRepository { get; }
@@ -21,8 +24,9 @@ namespace MediStock360.Infrastructure.Interfaces
         IGenericRepository<State> StateRepository { get; }
         IGenericRepository<Store> StoreRepository { get; }
         IGenericRepository<SubscriptionPlan> SubscriptionPlanRepository { get; }
+        IGenericRepository<UserOtp> UserOtpRepository { get; }
         Task<bool> SaveChangesAsync();
-        Task<IDbContextTransaction>BeginTransactionAsync();
+        Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
 
