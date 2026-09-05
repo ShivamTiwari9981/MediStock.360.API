@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class BusinessType
 {
     public int BusinessTypeId { get; set; }
+
+    public string BusinessTypeCode { get; set; } = null!;
 
     public string BusinessTypeName { get; set; } = null!;
 

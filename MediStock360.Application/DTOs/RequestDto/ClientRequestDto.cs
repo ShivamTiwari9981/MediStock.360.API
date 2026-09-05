@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace MediStock360.Application.DTOs.RequestDto
+namespace MediStock360.Application.DTOs.RequestDto 
 {
     public class ClientRequestDto
     {

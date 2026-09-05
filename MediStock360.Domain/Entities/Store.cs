@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class Store
 {
@@ -55,5 +55,9 @@ public partial class Store
 
     public virtual Client Client { get; set; } = null!;
 
-    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual ICollection<MasterCodeGeneration> MasterCodeGenerations { get; set; } = new List<MasterCodeGeneration>();
+
+    public virtual ICollection<StoreAppSetting> StoreAppSettings { get; set; } = new List<StoreAppSetting>();
+
+    public virtual ICollection<StoreUserMap> StoreUserMaps { get; set; } = new List<StoreUserMap>();
 }

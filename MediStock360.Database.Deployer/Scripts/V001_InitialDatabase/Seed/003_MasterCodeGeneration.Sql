@@ -1,0 +1,56 @@
+--/* ============================================================
+--   Seed : MasterCodeGeneration
+--   Purpose : Initial code generation configuration
+--   ============================================================ */
+
+--SET NOCOUNT ON;
+
+--/* ========================================================
+--   CLIENT LEVEL CODES
+--   ClientId = NULL
+--   StoreId  = NULL
+--   ======================================================== */
+
+--IF NOT EXISTS
+--(
+--    SELECT 1
+--    FROM MasterCodeGeneration
+--    WHERE ClientId IS NULL
+--      AND StoreId IS NULL
+--      AND CodeType = 'Client'
+--)
+--BEGIN
+--    INSERT INTO MasterCodeGeneration(ClientId,StoreId,CodeType,CodePrefix,CurrentNumber,NumberLength,IsActive)
+--    VALUES(NULL,NULL,'Client','CLI',0,3,1);
+--END;
+
+--IF NOT EXISTS
+--(
+--    SELECT 1
+--    FROM MasterCodeGeneration
+--    WHERE ClientId IS NULL
+--      AND StoreId IS NULL
+--      AND CodeType = 'Role'
+--)
+--BEGIN
+--    INSERT INTO MasterCodeGeneration
+--    (
+--        ClientId,
+--        StoreId,
+--        CodeType,
+--        CodePrefix,
+--        CurrentNumber,
+--        NumberLength,
+--        IsActive
+--    )
+--    VALUES
+--    (
+--        NULL,
+--        NULL,
+--        'Role',
+--        'ROL',
+--        0,
+--        3,
+--        1
+--    );
+--END;

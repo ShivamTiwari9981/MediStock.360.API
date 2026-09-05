@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class UserRole
 {
     public long UserRoleId { get; set; }
+
+    public long ClientId { get; set; }
 
     public long UserId { get; set; }
 

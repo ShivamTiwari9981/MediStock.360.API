@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class Menu
 {
@@ -14,6 +14,8 @@ public partial class Menu
     public string MenuIcon { get; set; } = null!;
 
     public string RouterLink { get; set; } = null!;
+
+    public string? PermissionCode { get; set; }
 
     public int? DisplayOrder { get; set; }
 

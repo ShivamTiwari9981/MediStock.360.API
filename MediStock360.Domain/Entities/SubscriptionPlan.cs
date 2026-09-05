@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class SubscriptionPlan
 {

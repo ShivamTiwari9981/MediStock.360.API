@@ -1,0 +1,10 @@
+********************************************** 1st Approch **************************************
+Scaffold-DbContext "Server=.\SQLExpress;Database=medical_store_db;User Id=smartinventory;Password=12345678;Trusted_Connection=True;TrustServerCertificate=true;Encrypt=false" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "Persistence" -ContextDir "Persistence" -Context "MedicalDbContext" -Force
+
+
+*********************************************** 2nd Approch ****************************************
+
+Scaffold-DbContext "Server=.\SQLExpress;Database=medical_store_db;User Id=smartinventory;Password=12345678;Trusted_Connection=True;TrustServerCertificate=true;Encrypt=false" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "Entities" -ContextDir "Temp" -Context "MedicalDbContext" -Tables Client,User,Store,Product -Force
+
+***************************************************** 3rd Approch *******************************************
+Scaffold-DbContext "Server=.\SQLExpress;Database=medical_store_db;User Id=smartinventory;Password=12345678;Trusted_Connection=True;TrustServerCertificate=true;Encrypt=false" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "..\MediStock360.Domain\Entities" -ContextDir "Persistence" -Context "MedicalDbContext" -Project MediStock360.Infrastructure -StartupProject MediStock360.API -Force

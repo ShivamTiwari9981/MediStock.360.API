@@ -2,21 +2,30 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Filters\**" />
+    <Compile Remove="Middleware\**" />
+    <Content Remove="Filters\**" />
+    <Content Remove="Middleware\**" />
+    <EmbeddedResource Remove="Filters\**" />
+    <EmbeddedResource Remove="Middleware\**" />
+    <None Remove="Filters\**" />
+    <None Remove="Middleware\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carbon.Redis" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.30" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.30">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.30" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="Filters\" />
   </ItemGroup>
 
   <ItemGroup>

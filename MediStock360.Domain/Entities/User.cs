@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MediStock360.Domain.Entities;
+namespace MediStock360.Infrastructure;
 
 public partial class User
 {
@@ -9,31 +9,27 @@ public partial class User
 
     public long ClientId { get; set; }
 
-    public long? StoreId { get; set; }
-
     public Guid UserKey { get; set; }
 
-    public string? EmployeeCode { get; set; }
-
-    public string FirstName { get; set; } = null!;
-
-    public string? LastName { get; set; }
+    public long? EmployeeId { get; set; }
 
     public string Email { get; set; } = null!;
-
-    public string? PhoneNumber { get; set; }
 
     public string UserName { get; set; } = null!;
 
     public string PasswordHash { get; set; } = null!;
 
-    public bool IsActive { get; set; }
+    public string UserSalt { get; set; } = null!;
 
     public bool IsEmailVerified { get; set; }
 
-    public bool IsPhoneVerified { get; set; }
+    public bool IsLocked { get; set; }
+
+    public bool IsActive { get; set; }
 
     public DateTime? LastLoginAt { get; set; }
+
+    public bool? IsSynced { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -45,7 +41,13 @@ public partial class User
 
     public virtual Client Client { get; set; } = null!;
 
-    public virtual Store? Store { get; set; }
+    public virtual ICollection<StoreUserMap> StoreUserMaps { get; set; } = new List<StoreUserMap>();
+
+    public virtual ICollection<UserAppSetting> UserAppSettings { get; set; } = new List<UserAppSetting>();
+
+    public virtual ICollection<UserOtp> UserOtps { get; set; } = new List<UserOtp>();
+
+    public virtual UserProfile? UserProfile { get; set; }
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

@@ -2,11 +2,14 @@
 {
     public class UserResponseDto
     {
-        public int UserId { get; set; }
-        public int ClientId { get; set; }
-        public string UserCode { get; set; }
+        public long UserId { get; set; }
+        public Guid UserKey { get; set; }
+        public long ClientId { get; set; }
+        public string ProfileImageUrl { get; set; }
         public string UserName { get; set; }
-        public string UserEmail { get; set; }
-        public bool IsCompanyProfileCreated { get; set; }
+        public string Email { get; set; }
+        public bool IsEmailVarified { get; set; }
+        public bool IsLocked { get; set; }
+        public bool IsActive { get; set; }
     }
 }
