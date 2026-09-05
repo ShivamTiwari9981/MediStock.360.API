@@ -1,10 +1,10 @@
-﻿--IF OBJECT_ID('dbo.sp_GenerateMasterCode', 'P') IS NOT NULL
+--IF OBJECT_ID('dbo.sp_GenerateMasterCode', 'P') IS NOT NULL
 --BEGIN
 --    DROP PROCEDURE dbo.sp_GenerateMasterCode;
 --END;
 
 
-CREATE PROCEDURE sp_GenerateMasterCode
+CREATE OR ALTER PROCEDURE dbo.sp_GenerateMasterCode
 (
     @ClientId BIGINT = NULL,
     @StoreId BIGINT = NULL,

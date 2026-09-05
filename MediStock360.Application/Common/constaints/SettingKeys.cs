@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MediStock360.Application.Common.constaints
+﻿namespace MediStock360.Application.Common.constaints
 {
     public static class SettingKeys
     {
@@ -15,5 +9,7 @@ namespace MediStock360.Application.Common.constaints
         public const string EnableSmsOtp = "EnableSmsOtp";
 
         public const string EnableWhatsappOtp = "EnableWhatsappOtp";
+        public const string OtpExpiryMinutes = "OTP_EXPIRY_MINUTES";
+        public const string JwtTokenExpiryMinutes = "JWT_TOKEN_EXPIRY_MINUTES";
     }
 }

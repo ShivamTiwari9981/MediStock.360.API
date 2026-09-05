@@ -4,8 +4,19 @@ namespace MediStock360.Application.DTOs.ResponseDto
 {
     public class RoleResponseDto
     {
-        public Guid RoleIds { get; set; }
-        public string RoleNames { get; set; }
+        public int RoleId { get; set; }
+
+        public long? ClientId { get; set; }
+
+        public string RoleCode { get; set; } = null!;
+
+        public string RoleName { get; set; } = null!;
+
+        public string? Description { get; set; }
+
+        public bool IsSystemRole { get; set; }
+
+        public bool IsActive { get; set; }
     }
 
    

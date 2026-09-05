@@ -1,7 +1,6 @@
 using MediStock360.Application.Interfaces;
 using MediStock360.Domain.Interfaces;
 using MediStock360.Infrastructure.Interfaces;
-using MediStock360.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data.Common;
@@ -28,8 +27,10 @@ namespace MediStock360.Infrastructure.Repositories
         public IGenericRepository<Menu> MenuRepository { get; }
         public IGenericRepository<State> StateRepository { get; }
         public IGenericRepository<Store> StoreRepository { get; }
+        public IGenericRepository<StoreUserMap> StoreUserMapRepository { get; }
         public IGenericRepository<SubscriptionPlan> SubscriptionPlanRepository { get; }
         public IGenericRepository<UserOtp> UserOtpRepository { get; }
+        public IGenericRepository<NotificationTemplate> NotificationTemplateRepository { get; }
         public IGenericRepository<AppSetting> AppSettingRepository { get; }
         public IGenericRepository<DatabaseVersion> DatabaseVersionRepository { get; }
         public IGenericRepository<MasterCodeGeneration> MasterCodeGenerationRepository { get; }
@@ -51,8 +52,10 @@ namespace MediStock360.Infrastructure.Repositories
             MenuRepository = new GenericRepository<Menu>(_context, _currentService);
             StateRepository = new GenericRepository<State>(_context, _currentService);
             StoreRepository = new GenericRepository<Store>(_context, _currentService);
+            StoreUserMapRepository = new GenericRepository<StoreUserMap>(_context, _currentService);
             SubscriptionPlanRepository = new GenericRepository<SubscriptionPlan>(_context, _currentService);
             UserOtpRepository = new GenericRepository<UserOtp>(_context, _currentService);
+            NotificationTemplateRepository = new GenericRepository<NotificationTemplate>(_context, _currentService);
             RolePermissionRepository = new GenericRepository<RolePermission>(_context, _currentService);
             AppSettingRepository = new GenericRepository<AppSetting>(_context, _currentService);
             DatabaseVersionRepository = new GenericRepository<DatabaseVersion>(_context, _currentService);

@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using MediStock360.Application.DTOs.RequestDto;
 using MediStock360.Application.DTOs.ResponseDto;
+using MediStock360.Infrastructure;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MediStock360.Application.Interfaces
 {
@@ -18,6 +19,10 @@ namespace MediStock360.Application.Interfaces
         Task<ApiResponse<bool>> ToggleMenuStatusAsync(int id);
         Task<ApiResponse<bool>> DeleteMenuAsync(int id);
         Task<ApiResponse<bool>> SeedDefaultMenusAsync();
+        //List<MenuResponseDto> BuildMenuTreeByProc(List<MenuResponseDto> allMenus);
+        List<MenuResponseDto> BuildMenuTree(List<Menu> allMenus, HashSet<int>? permittedMenuIds = null);
+
+
     }
 }
 

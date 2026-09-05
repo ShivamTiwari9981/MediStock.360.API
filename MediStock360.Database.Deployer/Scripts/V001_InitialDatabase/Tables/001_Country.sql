@@ -1,4 +1,4 @@
-﻿IF NOT EXISTS
+IF NOT EXISTS
 (
     SELECT 1
     FROM sys.tables
@@ -14,8 +14,7 @@ CREATE TABLE dbo.Country (
     CreatedAt DATETIME2 NOT NULL DEFAULT (SYSUTCDATETIME()),
     CreatedBy BIGINT NULL,
     UpdatedAt DATETIME2 NULL,
-    UpdatedBy BIGINT NULL,
+    UpdatedBy BIGINT NULL
 );
+END
 
-CREATE UNIQUE INDEX IX_Country_CountryGuid ON Country(CountryId);
-end

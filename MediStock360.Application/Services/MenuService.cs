@@ -216,7 +216,7 @@ namespace MediStock360.Application.Services
             return false;
         }
 
-        private List<MenuResponseDto> BuildMenuTree(List<Menu> allMenus, HashSet<int>? permittedMenuIds = null)
+        public List<MenuResponseDto> BuildMenuTree(List<Menu> allMenus, HashSet<int>? permittedMenuIds = null)
         {
             var result = new List<MenuResponseDto>();
             var parents = allMenus
@@ -281,6 +281,25 @@ namespace MediStock360.Application.Services
                 DisplayOrder = menu.DisplayOrder ?? 0,
                 IsVisible = menu.IsVisible ?? true,
                 IsActive = menu.IsActive == 1,
+                SubMenus = new List<MenuResponseDto>()
+            };
+        }
+
+
+        private MenuResponseDto MapToDtoWithResponseDto(MenuResponseDto menu, string? parentMenuName = null)
+        {
+            return new MenuResponseDto
+            {
+                MenuId = menu.MenuId,
+                ParentMenuId = menu.ParentMenuId,
+                ParentMenuName = parentMenuName ?? menu.ParentMenuName,
+                MenuName = menu.MenuName,
+                MenuIcon = menu.MenuIcon,
+                RouterLink = menu.RouterLink,
+                PermissionCode = menu.PermissionCode,
+                DisplayOrder = menu.DisplayOrder ?? 0,
+                IsVisible = menu.IsVisible,
+                IsActive = menu.IsActive,
                 SubMenus = new List<MenuResponseDto>()
             };
         }
@@ -631,6 +650,10 @@ namespace MediStock360.Application.Services
                 return ApiResponse<bool>.Fail(500, $"Error seeding default menus: {ex.Message}");
             }
         }
+
+
+        
+
 
         #endregion
     }

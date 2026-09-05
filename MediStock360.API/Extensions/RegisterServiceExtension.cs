@@ -1,5 +1,6 @@
 
 using HRMS.Application.Services;
+using MediStock360.Application.Common;
 using MediStock360.Application.Interfaces;
 using MediStock360.Application.Services;
 using MediStock360.Domain.Interfaces;
@@ -45,8 +46,8 @@ namespace MediStock360.API.Extensions
             //services.Configure<LoggingSettings>(
             //configuration.GetSection("LoggingSettings"));
 
-            //services.Configure<EmailSettings>(
-            //configuration.GetSection("EmailSettings"));
+            services.Configure<EmailSettings>(
+                configuration.GetSection("EmailSettings"));
 
             //services.Configure<RedisSettings>(
             //configuration.GetSection("JWTConnectionStrings"));

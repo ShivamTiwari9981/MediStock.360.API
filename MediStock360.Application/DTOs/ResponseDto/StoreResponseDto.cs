@@ -21,6 +21,7 @@ namespace MediStock360.Application.DTOs.ResponseDto
         public int? CityId { get; set; }
         public string? PostalCode { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDefaultStore { get; set; }
     }
 }
 

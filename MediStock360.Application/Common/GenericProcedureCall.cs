@@ -11,10 +11,11 @@ namespace MediStock360.Application.Common
         {
             public const string sp_GenerateMasterCode = "sp_GenerateMasterCode";
             public const string sp_RegisterClientUser = "sp_RegisterClientUser";
+            public const string sp_PlateformRegister = "sp_PlateformRegister";
             public const string Sp_User_Login = "Sp_User_Login";
-            public const string sp_AssignRolePermissions_TVP = "sp_AssignRolePermissions_TVP";
-            public const string sp_AssignBulkUserRoles = "sp_AssignBulkUserRoles";
-            public const string sp_GetUserRolePermissions = "sp_GetUserRolePermissions";
+            public const string Sp_VerifyUserOtp = "Sp_VerifyUserOtp";
+            public const string Sp_ResendUserOtp = "Sp_ResendUserOtp";
+            public const string Sp_Login = "Sp_Login";
             public const string sp_AddEmployee = "sp_AddEmployee";
             public const string Sp_EmployeeSalary = "Sp_EmployeeSalary";
             public const string SP_Add_User = "SP_Add_User";

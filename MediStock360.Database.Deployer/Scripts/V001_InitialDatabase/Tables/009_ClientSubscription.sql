@@ -5,8 +5,6 @@
     WHERE name = 'ClientSubscription'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
-
 CREATE TABLE dbo.ClientSubscription
 (
     ClientSubscriptionId BIGINT IDENTITY(1,1) NOT NULL,
@@ -71,4 +69,3 @@ ON ClientSubscription(SubscriptionPlanId);
 
 CREATE INDEX IX_ClientSubscription_Status
 ON ClientSubscription(Status);
-end

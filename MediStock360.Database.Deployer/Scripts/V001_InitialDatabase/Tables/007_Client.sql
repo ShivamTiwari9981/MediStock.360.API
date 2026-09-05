@@ -5,12 +5,11 @@
     WHERE name = 'Client'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
     CREATE TABLE dbo.Client (   
         ClientId BIGINT PRIMARY KEY Identity(100,1),
         ClientKey UNIQUEIDENTIFIER NOT NULL UNIQUE DEFAULT NEWID(),
         ClientCode NVARCHAR(50) Unique NOT NULL,
-        ClientName NVARCHAR(150) NULL,
+        ClientName NVARCHAR(150) NULL UNIQUE,
         CompanyName NVARCHAR(150) NOT NULL UNIQUE,
         OwnerName NVARCHAR(150) NULL,
         BusinessTypeId int  NULL,
@@ -43,4 +42,3 @@ BEGIN
             REFERENCES [State](StateId)
 
     );
-END

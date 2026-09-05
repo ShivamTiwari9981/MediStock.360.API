@@ -7,7 +7,9 @@ public partial class MasterCodeGeneration
 {
     public long MasterCodeGenerationId { get; set; }
 
-    public long? ClientId { get; set; }
+    public long ClientId { get; set; }
+
+    public long? StoreId { get; set; }
 
     public string CodeType { get; set; } = null!;
 
@@ -23,7 +25,7 @@ public partial class MasterCodeGeneration
 
     public DateTime? ModifiedDate { get; set; }
 
-    public long? StoreId { get; set; }
+    public virtual Client Client { get; set; } = null!;
 
-    public virtual Client? Client { get; set; }
+    public virtual Store? Store { get; set; }
 }

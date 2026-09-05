@@ -12,13 +12,15 @@ namespace MediStock360.Application.DTOs.ResponseDto
         public bool IsOnboardingCompleted { get; set; }
         public int OnboardingStep { get; set; }
 
-        public List<UserClientDto> Clients { get; set; } = new();
-        public UserClientDto? ActiveClient { get; set; }
+        //public List<UserClientDto> Clients { get; set; } = new();
+        public UserClientDto? Client { get; set; }
         public List<StoreResponseDto> Stores { get; set; } = new();
         public StoreResponseDto? ActiveStore { get; set; }
         public List<MenuResponseDto> Menus { get; set; } = new();
-
-        public LoginUserInfoDto User { get; set; } = null!;
+        public List<RoleResponseDto> Roles { get; set; } = new();
+        public List<string> Role { get; set; } = new();
+        public List<string> Permissions { get; set; } = new();
+        public UserResponseDto User { get; set; } = null!;
     }
 
     public class LoginUserInfoDto
@@ -37,13 +39,12 @@ namespace MediStock360.Application.DTOs.ResponseDto
         public bool IsActive { get; set; }
         public bool IsEmailVerified { get; set; }
         public bool IsPhoneVerified { get; set; }
-        public bool IsOnboardingCompleted { get; set; }
-        public int OnboardingStep { get; set; }
-        public List<string> Roles { get; set; } = new();
-        public List<string> Permissions { get; set; } = new();
+        //public bool IsOnboardingCompleted { get; set; }
+        //public int OnboardingStep { get; set; }
+       
 
-        public List<UserClientDto> Clients { get; set; } = new();
-        public List<StoreResponseDto> Stores { get; set; } = new();
-        public List<MenuResponseDto> Menus { get; set; } = new();
+        //public List<UserClientDto> Clients { get; set; } = new();
+        //public List<StoreResponseDto> Stores { get; set; } = new();
+        //public List<MenuResponseDto> Menus { get; set; } = new();
     }
 }

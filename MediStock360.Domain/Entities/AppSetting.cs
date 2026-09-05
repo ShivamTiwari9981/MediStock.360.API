@@ -7,8 +7,6 @@ public partial class AppSetting
 {
     public long AppSettingId { get; set; }
 
-    public long ClientId { get; set; }
-
     public string SettingKey { get; set; } = null!;
 
     public string SettingValue { get; set; } = null!;
@@ -26,4 +24,10 @@ public partial class AppSetting
     public DateTime? UpdatedAt { get; set; }
 
     public long? UpdatedBy { get; set; }
+
+    public virtual ICollection<ClientAppSetting> ClientAppSettings { get; set; } = new List<ClientAppSetting>();
+
+    public virtual ICollection<StoreAppSetting> StoreAppSettings { get; set; } = new List<StoreAppSetting>();
+
+    public virtual ICollection<UserAppSetting> UserAppSettings { get; set; } = new List<UserAppSetting>();
 }

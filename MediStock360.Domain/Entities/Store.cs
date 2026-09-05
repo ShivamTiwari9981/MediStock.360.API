@@ -54,4 +54,10 @@ public partial class Store
     public virtual City? City { get; set; }
 
     public virtual Client Client { get; set; } = null!;
+
+    public virtual ICollection<MasterCodeGeneration> MasterCodeGenerations { get; set; } = new List<MasterCodeGeneration>();
+
+    public virtual ICollection<StoreAppSetting> StoreAppSettings { get; set; } = new List<StoreAppSetting>();
+
+    public virtual ICollection<StoreUserMap> StoreUserMaps { get; set; } = new List<StoreUserMap>();
 }

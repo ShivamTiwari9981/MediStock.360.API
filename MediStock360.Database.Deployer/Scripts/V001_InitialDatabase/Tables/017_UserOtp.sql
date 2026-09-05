@@ -5,7 +5,6 @@
     WHERE name = 'UserOtp'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE UserOtp
 (
     UserOtpId BIGINT IDENTITY(1,1) PRIMARY KEY,
@@ -33,4 +32,3 @@ ON UserOtp(UserId, OtpType);
 
 CREATE INDEX IX_UserOtp_Active
 ON UserOtp(UserId, OtpType, IsUsed, ExpiresAt);
-END

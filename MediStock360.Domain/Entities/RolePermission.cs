@@ -11,11 +11,15 @@ public partial class RolePermission
 
     public int PermissionId { get; set; }
 
+    public bool IsActive { get; set; }
+
     public DateTime CreatedAt { get; set; }
 
     public long? CreatedBy { get; set; }
 
-    public virtual Permission Permission { get; set; } = null!;
+    public DateTime? UpdatedAt { get; set; }
 
-    public virtual Role Role { get; set; } = null!;
+    public long? UpdatedBy { get; set; }
+
+    public virtual Permission Permission { get; set; } = null!;
 }

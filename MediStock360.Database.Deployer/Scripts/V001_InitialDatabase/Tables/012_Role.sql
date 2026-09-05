@@ -5,11 +5,10 @@
     WHERE name = 'Role'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE dbo.Role
 (
     RoleId INT IDENTITY(1,1) NOT NULL,
-    ClientId BIGINT NULL,
+    ClientId BIGINT NOT NULL,
     RoleCode NVARCHAR(50) NOT NULL,
     RoleName NVARCHAR(100) NOT NULL,
     Description NVARCHAR(500) NULL,
@@ -30,4 +29,3 @@ CREATE TABLE dbo.Role
     CONSTRAINT UQ_Role_Client_RoleCode
         UNIQUE (ClientId, RoleCode)
 );
-END

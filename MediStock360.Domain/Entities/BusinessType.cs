@@ -7,6 +7,8 @@ public partial class BusinessType
 {
     public int BusinessTypeId { get; set; }
 
+    public string BusinessTypeCode { get; set; } = null!;
+
     public string BusinessTypeName { get; set; } = null!;
 
     public bool? IsActive { get; set; }

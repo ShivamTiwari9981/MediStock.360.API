@@ -3,5 +3,6 @@
     public interface ISettingService
     {
         Task<bool> IsEmailOtpEnabled();
+        Task<string> GetAppSettingValue(string settingKey);
     }
 }

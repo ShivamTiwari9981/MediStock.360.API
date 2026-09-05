@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Microsoft.Data.SqlClient;
 
 namespace MediStock360.Database.Deployer.Services;
@@ -175,12 +175,13 @@ public class MigrationService
             Console.WriteLine(
                 $"[SUCCESS] V{migration.VersionNumber:D3}");
         }
-        catch
+        catch (Exception ex)
         {
             await transaction.RollbackAsync();
 
             Console.WriteLine(
                 $"[FAILED] V{migration.VersionNumber:D3}");
+            Console.WriteLine($"Error: {ex.Message}");
 
             throw;
         }
@@ -194,6 +195,7 @@ public class MigrationService
             "Tables",
             "Functions",
             "Views",
+            "Procedures",
             "StoredProcedures",
             "Seed"
         };

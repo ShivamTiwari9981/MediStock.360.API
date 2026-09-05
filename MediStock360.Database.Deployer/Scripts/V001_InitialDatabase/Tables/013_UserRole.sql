@@ -5,11 +5,11 @@
     WHERE name = 'UserRole'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE UserRole
 (
 
     UserRoleId BIGINT IDENTITY(1,1) NOT NULL,
+    ClientId BIGINT NOT NULL,
     UserId BIGINT NOT NULL,
     RoleId INT NOT NULL,
     CreatedAt DATETIME2 NOT NULL DEFAULT (SYSUTCDATETIME()),
@@ -29,4 +29,3 @@ CREATE TABLE UserRole
     CONSTRAINT UQ_UserRole_User_Role
         UNIQUE (UserId, RoleId)
 );
-END

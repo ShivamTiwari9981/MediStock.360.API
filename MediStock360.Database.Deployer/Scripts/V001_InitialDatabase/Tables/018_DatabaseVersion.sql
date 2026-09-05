@@ -5,7 +5,6 @@
     WHERE name = 'DatabaseVersion'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 
 CREATE TABLE dbo.DatabaseVersion
 (
@@ -18,4 +17,3 @@ CREATE TABLE dbo.DatabaseVersion
     AppliedAt DATETIME2 NOT NULL
         DEFAULT SYSUTCDATETIME()
 );
-END

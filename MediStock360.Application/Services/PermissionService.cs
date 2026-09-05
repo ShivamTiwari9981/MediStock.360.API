@@ -413,8 +413,6 @@ namespace MediStock360.Application.Services
                     UserId = user.UserId,
                     UserName = user.UserName,
                     Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
                     Roles = roleItems
                 };
 

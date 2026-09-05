@@ -5,12 +5,10 @@
     WHERE name = 'MasterCodeGeneration'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
-
 CREATE TABLE MasterCodeGeneration
 (
     MasterCodeGenerationId BIGINT IDENTITY(1,1) PRIMARY KEY,
-    ClientId BIGINT NULL,
+    ClientId BIGINT NOT NULL,
     StoreId BIGINT NULL,
     CodeType NVARCHAR(50) NOT NULL,
     CodePrefix NVARCHAR(20) NOT NULL,
@@ -27,4 +25,3 @@ CREATE TABLE MasterCodeGeneration
         FOREIGN KEY (StoreId)
         REFERENCES Store(StoreId)
 );
-END

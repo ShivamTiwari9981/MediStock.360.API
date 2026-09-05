@@ -1,4 +1,4 @@
-﻿IF NOT EXISTS
+IF NOT EXISTS
 (
     SELECT 1
     FROM sys.tables
@@ -8,6 +8,7 @@
 BEGIN
 CREATE TABLE dbo.BusinessType (   
     BusinessTypeId int PRIMARY KEY identity(1,1) ,
+    BusinessTypeCode NVARCHAR(150) NOT NULL,
     BusinessTypeName NVARCHAR(150) NOT NULL,
     IsActive bit default 1,
     IsSynced bit default 0,
@@ -17,6 +18,6 @@ CREATE TABLE dbo.BusinessType (
     CreatedBy BIGINT NULL,
 
     UpdatedAt DATETIME2 NULL,
-    UpdatedBy BIGINT NULL,
+    UpdatedBy BIGINT NULL
 );
 END

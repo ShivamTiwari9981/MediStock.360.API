@@ -5,7 +5,6 @@
     WHERE name = 'Store'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE dbo.Store
 (
     StoreId BIGINT IDENTITY(1,1) NOT NULL,
@@ -57,5 +56,4 @@ CREATE TABLE dbo.Store
     CONSTRAINT CK_Store_StoreType
         CHECK (StoreType IN (1, 2, 3, 4, 5))
 );
-END
 

@@ -5,7 +5,6 @@
     WHERE name = 'State'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE dbo.[State] (
     StateId INT IDENTITY(1,1) PRIMARY KEY,                  -- Internal PK
     StateName NVARCHAR(100) NOT NULL,
@@ -23,6 +22,5 @@ CREATE TABLE dbo.[State] (
     CONSTRAINT FK_State_Country FOREIGN KEY (CountryId)-- FK to Country
         REFERENCES Country(CountryId)
 );
-END
 
---CREATE UNIQUE INDEX IX_State_State ON State(StateId);
+CREATE UNIQUE INDEX IX_State_State ON State(StateId);

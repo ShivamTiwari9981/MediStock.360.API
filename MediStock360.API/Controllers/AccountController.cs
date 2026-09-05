@@ -106,7 +106,24 @@ namespace MediStock360.API.Controllers
                 return BadRequest("OTP is required");
             }
 
-            var result = await _otpService.VerifyEmailOTP(dto.email, dto.otp);
+            var result = await _otpService.VerfyOtpAsync(dto.email, dto.otp);
+
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpPost("resend-otp")]
+        public async Task<IActionResult> ResendOTP([FromBody] OtpResendRequest dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.email))
+            {
+                return BadRequest("User email is required");
+            }
+           
+
+            var result = await _otpService.ResendOtp(dto.email);
 
             if (!result.IsSuccess)
                 return BadRequest(result);
@@ -121,6 +138,19 @@ namespace MediStock360.API.Controllers
                 return BadRequest(ModelState);
 
             var result = await _authService.ResetPassword(dto.UserEmail, dto.Password);
+
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+        [HttpPost("platform/register")]
+        public async Task<IActionResult> PlateformRegister([FromBody] PlateformRegister dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.PlateformUserAsync(dto);
 
             if (!result.IsSuccess)
                 return BadRequest(result);

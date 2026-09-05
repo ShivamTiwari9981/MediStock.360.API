@@ -5,7 +5,6 @@ IF NOT EXISTS
     WHERE name = 'Menu'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE dbo.Menu (
     MenuId int NOT NULL primary key Identity(1,1),
     ParentMenuId int NULL default null,
@@ -27,14 +26,12 @@ CREATE TABLE dbo.Menu (
     UpdatedBy BIGINT NULL,
     CONSTRAINT FK_Menu_Parent FOREIGN KEY (ParentMenuId) REFERENCES Menu(MenuId)
 );
-END
-ELSE
-BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM sys.columns 
-        WHERE object_id = OBJECT_ID('dbo.Menu') AND name = 'PermissionCode'
-    )
-    BEGIN
-        ALTER TABLE dbo.Menu ADD PermissionCode NVARCHAR(100) NULL;
-    END
-END
+--BEGIN
+--    IF NOT EXISTS (
+--        SELECT 1 FROM sys.columns 
+--        WHERE object_id = OBJECT_ID('dbo.Menu') AND name = 'PermissionCode'
+--    )
+--    BEGIN
+--        ALTER TABLE dbo.Menu ADD PermissionCode NVARCHAR(100) NULL;
+--    END
+--END

@@ -5,8 +5,6 @@
     WHERE name = 'SubscriptionPlan'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
-
 CREATE TABLE dbo.SubscriptionPlan
 (
     SubscriptionPlanId INT IDENTITY(1,1) NOT NULL,
@@ -55,4 +53,3 @@ CREATE TABLE dbo.SubscriptionPlan
     CONSTRAINT CK_SubscriptionPlan_CurrencyCode
         CHECK (CurrencyCode IN ('INR', 'USD', 'EUR', 'GBP', 'AED'))
 );
-END

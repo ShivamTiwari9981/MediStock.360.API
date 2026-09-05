@@ -7,7 +7,7 @@ public partial class Role
 {
     public int RoleId { get; set; }
 
-    public long? ClientId { get; set; }
+    public long ClientId { get; set; }
 
     public string RoleCode { get; set; } = null!;
 
@@ -27,9 +27,7 @@ public partial class Role
 
     public long? UpdatedBy { get; set; }
 
-    public virtual Client? Client { get; set; }
-
-    public virtual ICollection<RolePermission> RolePermissions { get; set; } = new List<RolePermission>();
+    public virtual Client Client { get; set; } = null!;
 
     public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
 }

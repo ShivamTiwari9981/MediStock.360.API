@@ -1,4 +1,4 @@
-﻿IF NOT EXISTS
+IF NOT EXISTS
 (
     SELECT 1
     FROM sys.tables
@@ -16,6 +16,6 @@ CREATE TABLE dbo.IsSyncData (
     CreatedAt DATETIME2 NOT NULL DEFAULT (SYSUTCDATETIME()),
     CreatedBy BIGINT NULL,
     UpdatedAt DATETIME2 NULL,
-    UpdatedBy BIGINT NULL,
+    UpdatedBy BIGINT NULL
 );
 END

@@ -5,11 +5,8 @@
     WHERE name = 'AppSetting'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
-
 CREATE TABLE [dbo].[AppSetting](
 	[AppSettingId] BIGINT IDENTITY(1,1) PRIMARY KEY,
-	[ClientId] BIGINT not NULL,
 	[SettingKey] [nvarchar](100) NOT NULL,
 	[SettingValue] [nvarchar](500) NOT NULL,
 	[DataType] [nvarchar](50) NULL,
@@ -20,4 +17,3 @@ CREATE TABLE [dbo].[AppSetting](
     UpdatedAt DATETIME2 NULL,
     UpdatedBy BIGINT NULL
 )
-END

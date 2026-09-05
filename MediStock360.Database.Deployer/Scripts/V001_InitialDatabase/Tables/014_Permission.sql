@@ -5,8 +5,6 @@
     WHERE name = 'Permission'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
-
 CREATE TABLE dbo.Permission
 (
     PermissionId INT IDENTITY(1,1) NOT NULL,
@@ -24,4 +22,3 @@ CREATE TABLE dbo.Permission
     CONSTRAINT UQ_Permission_Code
         UNIQUE (PermissionCode)
 );
-END

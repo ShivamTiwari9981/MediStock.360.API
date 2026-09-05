@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
@@ -8,9 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Scripts\V001_InitialDatabase\Procedures\**" />
-	  <EmbeddedResource Remove="Scripts\V001_InitialDatabase\Procedures\**" />
-	  <None Remove="Scripts\V001_InitialDatabase\Procedures\**" />
+	  <Compile Remove="Scripts\V002\**" />
+	  <EmbeddedResource Remove="Scripts\V002\**" />
+	  <None Remove="Scripts\V002\**" />
 	</ItemGroup>
 
 	<ItemGroup>

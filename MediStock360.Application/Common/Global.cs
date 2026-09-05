@@ -2,7 +2,7 @@ namespace MediStock360.Application.Common
 {
     public static class Global
     {
-        public static string ClientId = "ClientId";
+        public static long DefualtClient = 10000000;
         public static long InternalUser = 1000000;
         public static class Claim_Types
         {
@@ -17,7 +17,9 @@ namespace MediStock360.Application.Common
             public static string StoreId = "StoreId";
             public static string StoreKey = "StoreKey";
 
-            public static string IsCompanyProfileCreated = "IsCompanyProfileCreated";
+            public static string IsOnboardingCompleted = "IsOnboardingCompleted";
+            public static string OnboardingStep = "OnboardingStep";
+            public static string IsActive = "IsActive";
         }
         public static class MasterTable
         {

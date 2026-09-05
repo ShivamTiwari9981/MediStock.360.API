@@ -17,6 +17,11 @@ namespace HRMS.Application.Services
             _cache = cache;
         }
 
+        public async Task<string> GetAppSettingValue(string settingKey)
+        {
+            var result = await _unitOfWork.AppSettingRepository.FirstOrDefaultAsync(x => x.SettingKey == settingKey);
+            return result.SettingValue;
+        }
         public async Task<bool> IsEmailOtpEnabled()
         {
             // 1. Check Cache

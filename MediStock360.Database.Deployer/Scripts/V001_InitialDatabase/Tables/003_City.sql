@@ -5,7 +5,6 @@
     WHERE name = 'City'
       AND schema_id = SCHEMA_ID('dbo')
 )
-BEGIN
 CREATE TABLE dbo.City (
     CityId INT IDENTITY(1,1) PRIMARY KEY,                   -- Internal PK
     CityName NVARCHAR(100) NOT NULL,
@@ -26,5 +25,4 @@ CREATE TABLE dbo.City (
         REFERENCES Country(CountryId)
 );
 
---CREATE UNIQUE INDEX IX_City_City ON City(CityId);
-END
+CREATE UNIQUE INDEX IX_City_City ON City(CityId);
