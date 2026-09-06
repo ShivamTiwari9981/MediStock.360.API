@@ -11,25 +11,15 @@ namespace MediStock360.Application.Common
     {
         public static List<MenuResponseDto> BuildMenuTree(List<MenuResponseDto> flatList)
         {
-            // Map for quick lookup by MenuId
-            var lookup = flatList.ToDictionary(m => m.MenuId);
 
             var rootMenus = new List<MenuResponseDto>();
+            rootMenus =flatList.Where(X => X.ParentMenuId == null).ToList();
 
-            foreach (var menu in flatList)
+            foreach (var menu in rootMenus)
             {
-                if (menu.ParentMenuId.HasValue && lookup.ContainsKey(menu.ParentMenuId.Value))
-                {
-                    // Attach as child to its parent
-                    lookup[menu.ParentMenuId.Value].SubMenus.Add(menu);
-                }
-                else
-                {
-                    // No parent (or parent not found) → treat as root/top-level menu
-                    rootMenus.Add(menu);
-                }
+                    var submenu = flatList.Where(x => x.ParentMenuId == menu.MenuId).ToList();
+                    menu.SubMenus=submenu;
             }
-
             // Sort recursively by DisplayOrder
             SortMenuTrees(rootMenus);
 

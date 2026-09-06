@@ -1,9 +1,9 @@
---select * from Client
+﻿--select * from Client
 --select * from Store
 --select * from StoreUserMap
 --select * from [User]
 
---EXEC [Sp_Login] '100',10
+--EXEC [Sp_Login] '102',3
 CREATE OR ALTER PROCEDURE [dbo].[Sp_Login]
 (
     @ClientId BIGINT = NULL,
@@ -60,6 +60,7 @@ BEGIN
     --------------------------------------------------
     -- 4. USER PERMISSIONS
     --------------------------------------------------
+
     SELECT DISTINCT
     p.PermissionId,
     p.PermissionCode,
@@ -152,30 +153,102 @@ BEGIN
 
     END;
 
-    SELECT DISTINCT
-    m.MenuId,
-    m.MenuName,
-    m.ParentMenuId,
-    m.PermissionCode, 
-    m.RouterLink,
-    m.MenuIcon,
-    m.DisplayOrder,
-    m.IsVisible
-FROM UserRole ur
-INNER JOIN [Role] r
-    ON r.RoleId = ur.RoleId
-INNER JOIN RolePermission rp
-    ON rp.RoleId = r.RoleId
-INNER JOIN Permission p
-    ON p.PermissionId = rp.PermissionId
-INNER JOIN Menu m
-    ON m.PermissionCode = p.PermissionCode
-WHERE ur.UserId = 10
-  AND r.ClientId = 100
-  AND r.IsActive = 1
-  AND p.IsActive = 1
-  AND m.IsActive = 1
-ORDER BY m.DisplayOrder;
+
+    SELECT DISTINCT 
+    m.MenuId, 
+    m.MenuName, 
+    m.ParentMenuId, 
+    m.PermissionCode,  
+    m.RouterLink, 
+    m.MenuIcon, 
+    m.DisplayOrder, 
+    m.IsVisible 
+        FROM Menu m
+        WHERE m.IsActive = 1
+        AND
+        (
+            -- Dashboard हमेशा return
+            m.MenuName = 'Dashboard'
+
+            OR
+
+            -- Menu की खुद की permission है
+            EXISTS
+            (
+                SELECT 1
+                FROM UserRole ur
+                INNER JOIN [Role] r 
+                    ON r.RoleId = ur.RoleId
+                INNER JOIN RolePermission rp 
+                    ON rp.RoleId = r.RoleId
+                INNER JOIN Permission p 
+                    ON p.PermissionId = rp.PermissionId
+                WHERE ur.UserId = @UserId
+                  AND r.ClientId = @ClientId
+                  AND r.IsActive = 1
+                  AND p.IsActive = 1
+                  AND p.PermissionCode = m.PermissionCode
+            )
+
+            OR
+
+            -- Parent है और उसके कम-से-कम एक child को permission है
+            (
+                EXISTS
+                (
+                    SELECT 1
+                    FROM Menu child
+                    WHERE child.ParentMenuId = m.MenuId
+                      AND child.IsActive = 1
+                )
+                AND EXISTS
+                (
+                    SELECT 1
+                    FROM Menu child
+                    INNER JOIN Permission p 
+                        ON p.PermissionCode = child.PermissionCode
+                    INNER JOIN RolePermission rp 
+                        ON rp.PermissionId = p.PermissionId
+                    INNER JOIN UserRole ur 
+                        ON ur.RoleId = rp.RoleId
+                    INNER JOIN [Role] r 
+                        ON r.RoleId = ur.RoleId
+                    WHERE child.ParentMenuId = m.MenuId
+                      AND child.IsActive = 1
+                      AND ur.UserId = @UserId
+                      AND r.ClientId = @ClientId
+                      AND r.IsActive = 1
+                      AND p.IsActive = 1
+                )
+            )
+        )
+        ORDER BY m.DisplayOrder;
+
+
+--    SELECT DISTINCT
+--    m.MenuId,
+--    m.MenuName,
+--    m.ParentMenuId,
+--    m.PermissionCode, 
+--    m.RouterLink,
+--    m.MenuIcon,
+--    m.DisplayOrder,
+--    m.IsVisible
+--FROM UserRole ur
+--INNER JOIN [Role] r
+--    ON r.RoleId = ur.RoleId
+--INNER JOIN RolePermission rp
+--    ON rp.RoleId = r.RoleId
+--INNER JOIN Permission p
+--    ON p.PermissionId = rp.PermissionId
+--INNER JOIN Menu m
+--    ON m.PermissionCode = p.PermissionCode
+--WHERE ur.UserId = @UserId
+--  AND r.ClientId = @ClientId
+--  AND r.IsActive = 1
+--  AND p.IsActive = 1
+--  AND m.IsActive = 1
+--ORDER BY m.DisplayOrder;
 
 
     --------------------------------------------------

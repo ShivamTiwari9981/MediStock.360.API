@@ -9,10 +9,6 @@ namespace MediStock360.Application.DTOs.RequestDto
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = string.Empty;
-
-        public long? ClientId { get; set; }
-
-        public long? StoreId { get; set; }
     }
 
     public class SwitchClientRequestDto

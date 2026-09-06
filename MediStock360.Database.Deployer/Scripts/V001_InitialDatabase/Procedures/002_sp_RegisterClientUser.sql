@@ -70,7 +70,6 @@ BEGIN
         /* =====================================================
            5. INSERT CLIENT
            ===================================================== */
-
         INSERT INTO dbo.Client
         (
             ClientCode,
@@ -103,7 +102,23 @@ BEGIN
 
 
         /* =====================================================
-           7. INSERT USER
+           7. INSERT MasterCodeGeneration
+           ===================================================== */
+
+        ;WITH LatestRecord AS
+        (
+            SELECT TOP (1) *
+            FROM MasterCodeGeneration
+            WHERE ClientId IS NULL
+            ORDER BY CreatedDate DESC
+        )
+        UPDATE LatestRecord
+        SET ClientId = @ClientId,
+        ModifiedDate = SYSUTCDATETIME();
+        
+
+        /* =====================================================
+           8. INSERT USER
            ===================================================== */
 
         INSERT INTO dbo.[User]
@@ -178,19 +193,30 @@ BEGIN
         /* =====================================================
            10. INSERT USER ROLE
            ===================================================== */
-
         INSERT INTO dbo.UserRole
         (
+            ClientId,
             UserId,
             RoleId,
             CreatedBy
         )
         VALUES
         (
+            @ClientId,
             @UserId,
             @RoleId,
             @CreatedBy
         );
+
+        EXEC dbo.sp_RolePermission
+            @RoleId = @RoleId,
+            @CreatedBy = @UserId,
+            @ErrNumber = @RoleStatus OUTPUT;
+
+        IF @RoleStatus <> 0
+        BEGIN
+            THROW 50006, 'Role Permission Map failed.', 1;
+        END;
 
 
         /* =====================================================
