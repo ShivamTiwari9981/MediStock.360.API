@@ -4,6 +4,7 @@ using MediStock360.Application.Common.constaints;
 using MediStock360.Application.DTOs.RequestDto;
 using MediStock360.Application.DTOs.ResponseDto;
 using MediStock360.Application.Enums;
+using MediStock360.Application.Interface;
 using MediStock360.Application.Interfaces;
 using MediStock360.Domain.Entities;
 using MediStock360.Domain.Interfaces;
@@ -31,7 +32,9 @@ namespace MediStock360.Application.Services
             _unitOfWork = unitOfWork;
 
         }
-        public async Task<ApiResponse<bool>> SendOtpAsync(string userEmail)
+
+        
+        public async Task<ApiResponse<bool>> SendOtpAsync(string userEmail,OtpPurpose purpose)
         {
             try
             {
@@ -75,7 +78,7 @@ namespace MediStock360.Application.Services
                 }
 
                 // Save OTP to database and Redis
-                await SaveOTP(user.UserId, userEmail, otp);
+                await SaveOTP(user.UserId, userEmail, otp,purpose);
 
                 return ApiResponse<bool>.Success(true, "OTP sent successfully");
             }
@@ -84,7 +87,7 @@ namespace MediStock360.Application.Services
                 return ApiResponse<bool>.Fail(1, ex.Message);
             }
         }
-        public async Task SaveOTP(long userId, string userEmail, string otp)
+        public async Task SaveOTP(long userId, string userEmail, string otp, OtpPurpose purpose)
         {
             try
             {
@@ -159,7 +162,7 @@ namespace MediStock360.Application.Services
                 return ApiResponse<bool>.Fail(500, ex.Message);
             }
         }
-        public async Task<ApiResponse<bool>> ResendOtp(string userEmail)
+        public async Task<ApiResponse<bool>> ResendOtp(string userEmail, OtpPurpose purpose)
         {
             try
             {

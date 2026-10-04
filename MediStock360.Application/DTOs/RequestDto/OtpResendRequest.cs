@@ -1,5 +1,6 @@
 ﻿
 
+using MediStock360.Application.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace MediStock360.Application.DTOs.RequestDto
@@ -10,5 +11,6 @@ namespace MediStock360.Application.DTOs.RequestDto
         [Required]
         [MaxLength(200)]
         public string email { get; set; }
+        public OtpPurpose OtpPurpose { get; set; }
     }
 }

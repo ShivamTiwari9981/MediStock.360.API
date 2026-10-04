@@ -1,6 +1,7 @@
 
 using HRMS.Application.Services;
 using MediStock360.Application.Common;
+using MediStock360.Application.Interface;
 using MediStock360.Application.Interfaces;
 using MediStock360.Application.Services;
 using MediStock360.Domain.Interfaces;
@@ -26,6 +27,7 @@ namespace MediStock360.API.Extensions
             services.AddScoped<IOTPService, OTPService>();
             services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IMenuService, MenuService>();
+            services.AddScoped<IUserService, UserService>();
             //services.AddScoped<IMasterDataService, MasterDataService>();
             //services.AddScoped<IDepartmentService, DepartmentService>();
             //services.AddScoped<IDesignationService, DesignationService>();
