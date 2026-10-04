@@ -9,8 +9,9 @@ namespace MediStock360.Application.Enums
     public enum OtpPurpose
     {
         ClientRegistration = 1,
-        ForgotPassword = 2,
-        Login = 3,
-        ChangeMobile = 4
+        UserRegistration = 2,
+        ForgotPassword = 3,
+        ChangeMobile = 4,
+        ChangeEmail = 5
     }
 }

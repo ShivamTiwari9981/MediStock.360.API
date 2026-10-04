@@ -113,6 +113,7 @@ namespace MediStock360.Application.Services
                     OtpHash = otpHash,
                     //OtpHash = otp,
                     OtpType = (int)OtpType.EmailOTP, // 1 for Email OTP
+                    OtpPurpose = (byte)purpose,
                     AttemptCount = 0,
                     IsUsed = false,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(Convert.ToDouble(expiryMinutes)),

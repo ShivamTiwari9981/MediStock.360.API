@@ -9,6 +9,6 @@ namespace MediStock360.Application.DTOs.RequestDto
     public class ResetPasswordDto
     {
         public string UserEmail { get; set; }
-        public string UserPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }

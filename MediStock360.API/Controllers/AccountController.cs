@@ -87,6 +87,8 @@ namespace MediStock360.API.Controllers
             {
                 return BadRequest("User email is required");
             }
+            if(dto.OtpPurpose<=0)
+                return BadRequest("Invalid Otp purpose");
 
             var result = await _userService.IsUserExist(dto.UserEmail);
 
@@ -139,13 +141,13 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("reset-password")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _authService.ResetPassword(dto.UserEmail, dto.UserPassword);
+            var result = await _authService.ResetPassword(dto.UserEmail, dto.ConfirmPassword);
 
             if (!result.IsSuccess)
                 return BadRequest(result);
