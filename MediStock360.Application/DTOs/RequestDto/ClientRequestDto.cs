@@ -5,6 +5,8 @@ namespace MediStock360.Application.DTOs.RequestDto
 {
     public class ClientRequestDto
     {
+        public long ClientId { get; set; }
+        public Guid ClientKey {get;set;}
         [Required]
         [MaxLength(200)]
         public string CompanyName { get; set; }
