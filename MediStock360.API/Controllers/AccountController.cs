@@ -1,9 +1,11 @@
-using System.Threading.Tasks;
 using MediStock360.Application.DTOs.RequestDto;
+using MediStock360.Application.Interface;
 using MediStock360.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace MediStock360.API.Controllers
 {
@@ -13,11 +15,13 @@ namespace MediStock360.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IOTPService _otpService;
+        private readonly IUserService _userService;
 
-        public AccountController(IAuthService authService, IOTPService otpService)
+        public AccountController(IAuthService authService, IOTPService otpService, IUserService userService)
         {
             _authService = authService;
             _otpService = otpService;
+            _userService = userService;
         }
 
         [HttpPost("signup")]
@@ -76,22 +80,28 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("forget-password")]
-        public async Task<IActionResult> ForgetPassword([FromQuery] string userEmail)
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDto dto)
         {
-            if (string.IsNullOrWhiteSpace(userEmail))
+            if (string.IsNullOrWhiteSpace(dto.UserEmail))
             {
                 return BadRequest("User email is required");
             }
+            if(dto.OtpPurpose<=0)
+                return BadRequest("Invalid Otp purpose");
 
-            var result = await _otpService.SendOtpAsync(userEmail);
+            var result = await _userService.IsUserExist(dto.UserEmail);
 
             if (!result.IsSuccess)
             {
                 return BadRequest(result);
             }
+            else
+            {
+               await _otpService.SendOtpAsync(dto.UserEmail,dto.OtpPurpose);
+            }
 
-            return Ok(result);
+                return Ok(result);
         }
 
         [HttpPost("verify-otp")]
@@ -123,7 +133,7 @@ namespace MediStock360.API.Controllers
             }
            
 
-            var result = await _otpService.ResendOtp(dto.email);
+            var result = await _otpService.ResendOtp(dto.email, dto.OtpPurpose);
 
             if (!result.IsSuccess)
                 return BadRequest(result);
@@ -131,13 +141,13 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
-        [HttpPut("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ForgetPasswordDto dto)
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _authService.ResetPassword(dto.UserEmail, dto.Password);
+            var result = await _authService.ResetPassword(dto.UserEmail, dto.ConfirmPassword);
 
             if (!result.IsSuccess)
                 return BadRequest(result);

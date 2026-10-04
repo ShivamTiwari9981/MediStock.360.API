@@ -83,7 +83,7 @@ namespace MediStock360.Application.Services
                 {
                     try
                     {
-                        var otpResult = await _otpService.SendOtpAsync(dto.Email);
+                        var otpResult = await _otpService.SendOtpAsync(dto.Email,Enums.OtpPurpose.ClientRegistration);
                         if (!otpResult.IsSuccess)
                         {
                             return ApiResponse<string>.Success(null, "Signup successful. OTP sending failed, please try forget-password to request OTP");
@@ -832,7 +832,7 @@ namespace MediStock360.Application.Services
                 {
                     try
                     {
-                        var otpResult = await _otpService.SendOtpAsync(dto.Email);
+                        var otpResult = await _otpService.SendOtpAsync(dto.Email, Enums.OtpPurpose.ClientRegistration);
                         if (!otpResult.IsSuccess)
                         {
                             return ApiResponse<string>.Success(null, "User successful. OTP sending failed, please try forget-password to request OTP");

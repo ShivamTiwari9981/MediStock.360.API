@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MediStock360.Application.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace MediStock360.Application.DTOs.RequestDto 
 {
@@ -7,6 +8,6 @@ namespace MediStock360.Application.DTOs.RequestDto
         [Required]
         public string UserEmail { get; set; }
         [Required]
-        public string Password { get; set; }
+        public OtpPurpose OtpPurpose { get; set; }
     }
 }

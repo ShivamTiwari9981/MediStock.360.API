@@ -262,7 +262,6 @@ public partial class MedicalDbContext : DbContext
 
             entity.HasOne(d => d.Client).WithMany(p => p.MasterCodeGenerations)
                 .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MasterCodeGeneration_Client");
 
             entity.HasOne(d => d.Store).WithMany(p => p.MasterCodeGenerations)

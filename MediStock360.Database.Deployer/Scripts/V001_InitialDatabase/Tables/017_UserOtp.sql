@@ -12,6 +12,7 @@ CREATE TABLE UserOtp
     UserId BIGINT NOT NULL,
     -- 1 = Email, 2 = Phone
     OtpType TINYINT NOT NULL,
+    OtpPurpose TINYINT NOT NULL,
     OtpHash NVARCHAR(500) NOT NULL,
     ExpiresAt DATETIME2 NOT NULL,
     AttemptCount INT NOT NULL DEFAULT (0),

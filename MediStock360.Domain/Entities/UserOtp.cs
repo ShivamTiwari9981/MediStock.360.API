@@ -25,5 +25,7 @@ public partial class UserOtp
 
     public DateTime? VerifiedAt { get; set; }
 
+    public byte? OtpPurpose { get; set; }
+
     public virtual User User { get; set; } = null!;
 }
