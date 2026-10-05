@@ -17,6 +17,7 @@ namespace MediStock360.Application.DTOs.ResponseDto
         public List<StoreResponseDto> Stores { get; set; } = new();
         public StoreResponseDto? ActiveStore { get; set; }
         public List<MenuResponseDto> Menus { get; set; } = new();
+        public List<BusinessTypeResponseDto> BusinessType { get; set; } = new();
         public List<RoleResponseDto> Roles { get; set; } = new();
         public List<string> Role { get; set; } = new();
         public List<string> Permissions { get; set; } = new();

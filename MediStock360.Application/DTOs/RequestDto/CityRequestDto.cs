@@ -1,15 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace MediStock360.Application.DTOs.RequestDto 
 {
     public class CityRequestDto
     {
-        public Guid CityId { get; set; } = Guid.Empty;
+        public int CityId { get; set; }
 
         [Required]
-        public Guid StateId { get; set; }
+        public int StateId { get; set; }
+
+        public int CountryId { get; set; }
 
         [Required]
         public string CityName { get; set; }
+
+        public bool? IsActive { get; set; }
     }
 }
+
