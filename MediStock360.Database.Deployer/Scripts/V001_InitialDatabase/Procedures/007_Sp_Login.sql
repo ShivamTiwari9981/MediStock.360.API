@@ -83,16 +83,26 @@ BEGIN
     -- 5. CLIENT
     --------------------------------------------------
     SELECT
-        c.ClientId,
-        c.ClientKey,
-        c.ClientName,
-        c.CompanyName,
-        c.Email,
-        c.IsOnboardingCompleted,
-        c.OnboardingStep,
-        c.IsActive
-    FROM Client c
-    WHERE c.ClientId = @ClientId;
+        TOP 1 
+        ClientId,
+        ClientCode,
+        ClientKey,
+        ClientName,
+        CompanyName, 
+        OwnerName, 
+        BusinessTypeId,
+        Email ,
+        Phone ,
+        GSTNumber ,
+        DrugLicenseNumber ,
+        CityId ,
+        StateId ,
+        CountryId,
+        PostalCode,
+        OnboardingStep,
+        IsOnboardingCompleted
+    FROM Client 
+    WHERE ClientId = @ClientId;
 
 
     --------------------------------------------------
@@ -177,7 +187,9 @@ WHERE ur.UserId = 10
   AND m.IsActive = 1
 ORDER BY m.DisplayOrder;
 
+SELECT BusinessTypeId,BusinessTypeCode,BusinessTypeName FROM BusinessType 
 
+select CountryId,CountryName from Country
     --------------------------------------------------
     -- 7. UPDATE LAST LOGIN
     --------------------------------------------------

@@ -153,6 +153,7 @@ namespace MediStock360.Application.Services
                 var client = CommonMethod.ConvertToList<UserClientDto>(result.Tables[3]).FirstOrDefault();
                 var stores = CommonMethod.ConvertToList<StoreResponseDto>(result.Tables[4]);
                 var menus = CommonMethod.ConvertToList<MenuResponseDto>(result.Tables[5]);
+                var businessTypes = CommonMethod.ConvertToList<BusinessTypeResponseDto>(result.Tables[6]);
                 var activeStore = stores.FirstOrDefault(x => x.IsDefaultStore == true);
                 var permissionCodes = permissions.Select(x => x.PermissionCode);
 
@@ -173,7 +174,8 @@ namespace MediStock360.Application.Services
                     Role = roles.Select(r => r.RoleName).ToList(),
                     Permissions = permissionCodes.ToList(),
                     IsOnboardingCompleted = client.IsOnboardingCompleted,
-                    User= userResponse
+                    User= userResponse,
+                    BusinessType = businessTypes
                 };
                 return ApiResponse<LoginResponseDto>.Success(responseDto, "Login successful");
                 //return ApiResponse<LoginResponseDto>.Success(null, "Login successful");
