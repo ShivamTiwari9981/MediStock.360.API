@@ -17,10 +17,7 @@ namespace MediStock360.API.Extensions
             #region RegisterAllService
             //services.AddScoped<IUtilityService, UtilityService>();
             services.AddScoped<IAuthService, AuthService>();
-            //services.AddScoped<IClientService, ClientService>();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
-            //services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IUtilityService, UtilityService>();
             services.AddScoped<IRedisCacheService, RedisCacheService>();
             services.AddScoped<ISettingService, SettingService>();
             services.AddScoped<IEmailService, EmailService>();
@@ -30,7 +27,7 @@ namespace MediStock360.API.Extensions
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMasterService, MasterService>();
             services.AddScoped<IClientService, ClientService>();
-            //services.AddScoped<IMasterDataService, MasterDataService>();
+            services.AddScoped<IStoreService, StoreService>();
             //services.AddScoped<IDepartmentService, DepartmentService>();
             //services.AddScoped<IDesignationService, DesignationService>();
             //services.AddScoped<IEmployeeService, EmployeeService>();

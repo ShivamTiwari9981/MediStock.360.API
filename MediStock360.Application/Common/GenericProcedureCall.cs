@@ -17,6 +17,7 @@ namespace MediStock360.Application.Common
             public const string Sp_ResendUserOtp = "Sp_ResendUserOtp";
             public const string Sp_Login = "Sp_Login";
             public const string Sp_UpdateClient = "Sp_UpdateClient";
+            public const string Sp_AddStore = "SP_AddStore";
 
             public const string sp_AddEmployee = "sp_AddEmployee";
             public const string Sp_EmployeeSalary = "Sp_EmployeeSalary";

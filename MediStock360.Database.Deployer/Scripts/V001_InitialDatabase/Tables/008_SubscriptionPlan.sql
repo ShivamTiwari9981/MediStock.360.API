@@ -7,6 +7,7 @@
 )
 CREATE TABLE dbo.SubscriptionPlan
 (
+    
     SubscriptionPlanId INT IDENTITY(1,1) NOT NULL,
     PlanCode NVARCHAR(50) NOT NULL,
     PlanName NVARCHAR(100) NOT NULL,

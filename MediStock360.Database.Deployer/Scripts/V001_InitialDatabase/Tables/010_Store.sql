@@ -18,14 +18,14 @@ CREATE TABLE dbo.Store
     -- 3 = Hospital Pharmacy
     -- 4 = Warehouse
     -- 5 = Distributor
-    OwnerName NVARCHAR(150) NULL,
-    Email NVARCHAR(150) NULL,
+    StoreEmail NVARCHAR(150) NULL,
     PhoneNumber NVARCHAR(20) NULL,
     AlternatePhoneNumber NVARCHAR(20) NULL,
-    GSTNumber NVARCHAR(50) NULL,
     DrugLicenseNumber NVARCHAR(100) NULL,
     AddressLine1 NVARCHAR(250) NULL,
     AddressLine2 NVARCHAR(250) NULL,
+    CountryId INT NULL,
+    StateId INT NULL,
     CityId INT NULL,
     PostalCode NVARCHAR(20) NULL,
     Latitude DECIMAL(10,7) NULL,

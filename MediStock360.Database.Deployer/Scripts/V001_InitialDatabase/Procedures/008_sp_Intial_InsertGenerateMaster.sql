@@ -34,6 +34,19 @@ BEGIN
             VALUES(@ClientId,@StoreId,'Client','CLI',0,3,1);
         END;
 
+
+        IF NOT EXISTS
+        (
+            SELECT 1
+            FROM MasterCodeGeneration
+            WHERE ClientId =@ClientId
+              AND CodeType = 'Store'
+        )
+        BEGIN
+            INSERT INTO MasterCodeGeneration(ClientId,StoreId,CodeType,CodePrefix,CurrentNumber,NumberLength,IsActive)
+            VALUES(@ClientId,@StoreId,'Store','STO',0,3,1);
+        END;
+
         IF NOT EXISTS
         (
             SELECT 1
