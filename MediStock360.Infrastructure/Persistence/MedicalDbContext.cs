@@ -387,17 +387,13 @@ public partial class MedicalDbContext : DbContext
             entity.Property(e => e.AlternatePhoneNumber).HasMaxLength(20);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
             entity.Property(e => e.DrugLicenseNumber).HasMaxLength(100);
-            entity.Property(e => e.Email).HasMaxLength(150);
-            entity.Property(e => e.Gstnumber)
-                .HasMaxLength(50)
-                .HasColumnName("GSTNumber");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Latitude).HasColumnType("decimal(10, 7)");
             entity.Property(e => e.Longitude).HasColumnType("decimal(10, 7)");
-            entity.Property(e => e.OwnerName).HasMaxLength(150);
             entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.PostalCode).HasMaxLength(20);
             entity.Property(e => e.StoreCode).HasMaxLength(50);
+            entity.Property(e => e.StoreEmail).HasMaxLength(150);
             entity.Property(e => e.StoreKey).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.StoreName).HasMaxLength(200);
             entity.Property(e => e.StoreType).HasDefaultValue((byte)1);

@@ -198,5 +198,3 @@ select CountryId,CountryName from Country
     WHERE UserId = @UserId;
 
 END
-
-

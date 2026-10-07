@@ -17,15 +17,11 @@ public partial class Store
 
     public byte StoreType { get; set; }
 
-    public string? OwnerName { get; set; }
-
-    public string? Email { get; set; }
+    public string? StoreEmail { get; set; }
 
     public string? PhoneNumber { get; set; }
 
     public string? AlternatePhoneNumber { get; set; }
-
-    public string? Gstnumber { get; set; }
 
     public string? DrugLicenseNumber { get; set; }
 
@@ -50,6 +46,10 @@ public partial class Store
     public DateTime? UpdatedAt { get; set; }
 
     public long? UpdatedBy { get; set; }
+
+    public int? CountryId { get; set; }
+
+    public int? StateId { get; set; }
 
     public virtual City? City { get; set; }
 

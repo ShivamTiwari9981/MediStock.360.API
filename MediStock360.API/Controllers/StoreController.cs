@@ -1,4 +1,5 @@
 ﻿using MediStock360.Application.DTOs.RequestDto;
+using MediStock360.Application.Interface;
 using MediStock360.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,30 +8,25 @@ using Microsoft.AspNetCore.Mvc;
 namespace MediStock360.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
-    public class ClientController : ControllerBase
+    [Authorize]
+    public class StoreController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IStoreService _storeService;
 
-        public ClientController(IClientService clientService)
+        public StoreController(IStoreService storeService)
         {
-            _clientService = clientService;
+            _storeService = storeService;
         }
 
-        [HttpPost("update-client")]
-        public async Task<IActionResult> UpdateClient([FromBody] ClientRequestDto dto)
+        [HttpPost("add-store")]
+        public IActionResult AddStore([FromBody] StoreRequestDto dto)
         {
-            if (dto.ClientKey == Guid.Empty)
-                return BadRequest(ModelState);
-
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            dto.IsUpdate = true;
-
-            var result = await _clientService.UpdateClient(dto);
+            var result =  _storeService.AddStore(dto);
 
             if (!result.IsSuccess)
                 return BadRequest(result);
@@ -38,5 +34,4 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
     }
-
 }
