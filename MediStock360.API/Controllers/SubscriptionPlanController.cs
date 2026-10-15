@@ -9,10 +9,12 @@ namespace MediStock360.API.Controllers
     public class SubscriptionPlanController : ControllerBase
     {
         private readonly ISubscriptionPlanService _subscriptionPlanService;
+        private readonly IPaymentService _paymentService;
 
-        public SubscriptionPlanController(ISubscriptionPlanService subscriptionPlanService)
+        public SubscriptionPlanController(ISubscriptionPlanService subscriptionPlanService, IPaymentService paymentService)
         {
             _subscriptionPlanService = subscriptionPlanService;
+            _paymentService = paymentService;
         }
 
         [HttpGet("plans")]
@@ -44,5 +46,18 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost("offline-payment")]
+        public async Task<IActionResult> OfflinePayment([FromBody] SaveClientPaymentRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _paymentService.SubmitClientPaymentAsync(dto);
+
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

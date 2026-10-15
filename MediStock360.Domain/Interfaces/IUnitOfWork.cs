@@ -24,8 +24,11 @@ namespace MediStock360.Domain.Interfaces
         IGenericRepository<Store> StoreRepository { get; }
         IGenericRepository<StoreUserMap> StoreUserMapRepository { get; }
         IGenericRepository<SubscriptionPlan> SubscriptionPlanRepository { get; }
+        IGenericRepository<ClientPayment> ClientPaymentRepository { get; }
+        IGenericRepository<PaymentConfiguration> PaymentConfigurationRepository { get; }
         IGenericRepository<UserOtp> UserOtpRepository { get; }
         IGenericRepository<NotificationTemplate> NotificationTemplateRepository { get; }
+        IGenericRepository<ClientAppSetting> ClientAppSettingRepository { get; }
         Task<bool> SaveChangesAsync();
         Task<IDbContextTransaction> BeginTransactionAsync();
         Task CommitTransactionAsync();

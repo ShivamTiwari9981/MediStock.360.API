@@ -1,4 +1,5 @@
-﻿using MediStock360.Application.Interface;
+using MediStock360.Application.DTOs.RequestDto;
+using MediStock360.Application.Interface;
 using MediStock360.Application.Interfaces;
 using MediStock360.Application.Services;
 using Microsoft.AspNetCore.Http;
@@ -81,5 +82,41 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost("submit-client-payment")]
+        [HttpPost("offline-payment")]
+        public async Task<IActionResult> SubmitClientPayment([FromBody] SaveClientPaymentRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _paymentService.SubmitClientPaymentAsync(dto);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpPost("approve-payment")]
+        public async Task<IActionResult> ApprovePayment([FromBody] ApprovePaymentRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _paymentService.ApproveClientPaymentAsync(dto);
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpPost("test-telegram")]
+        public async Task<IActionResult> TestTelegram([FromQuery] string? message)
+        {
+            var result = await _paymentService.TestTelegramBotAsync(message ?? "MediStock360 Telegram Bot is connected and active!");
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace MediStock360.API
             {
                 options.AddPolicy("AllowAngular",
                     policy => policy
-                        .WithOrigins("http://localhost:4200") // your Angular app
+                        .WithOrigins("http://localhost:4200", "http://localhost:56558") // Angular app ports
                         .AllowAnyHeader()
                         .AllowAnyMethod());
             });

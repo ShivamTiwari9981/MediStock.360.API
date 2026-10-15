@@ -99,20 +99,53 @@ public class ScaffoldService
         Console.WriteLine();
 
         // -------------------------------------------------
+        // Check replace-all configuration
+        // -------------------------------------------------
+
+        bool replaceAll = false;
+        var cfgVal = _configuration["DatabaseSettings:ReplaceAllEntities"];
+        if (!string.IsNullOrEmpty(cfgVal) && bool.TryParse(cfgVal, out var parsed))
+        {
+            replaceAll = parsed;
+        }
+
+        // If replaceAll is true we keep previous behavior (force overwrite).
+        // If false we scaffold into a temporary directory and then selectively copy only new/changed files.
+
+        string tempRoot = string.Empty;
+        string outputEntityDir = entityDirectory;
+        string outputContextDir = contextDirectory;
+
+        if (!replaceAll)
+        {
+            tempRoot = Path.Combine(Path.GetTempPath(), "efscaffold", Guid.NewGuid().ToString("N"));
+            outputEntityDir = Path.Combine(tempRoot, "Entities");
+            outputContextDir = Path.Combine(tempRoot, "Persistence");
+
+            Directory.CreateDirectory(outputEntityDir);
+            Directory.CreateDirectory(outputContextDir);
+
+            Console.WriteLine($"Scaffolding into temporary folder: {tempRoot}");
+        }
+
+        // -------------------------------------------------
         // Scaffold Arguments
         // -------------------------------------------------
 
+        // When replaceAll == true include --force and scaffold directly into project folders.
+        // When replaceAll == false scaffold into temp folders without --force so we can copy selectively.
+
         string arguments =
-            $"ef dbcontext scaffold " +
+            "ef dbcontext scaffold " +
             $"\"{connectionString}\" " +
-            $"Microsoft.EntityFrameworkCore.SqlServer " +
+            "Microsoft.EntityFrameworkCore.SqlServer " +
             $"--project \"{infrastructureProject}\" " +
             $"--startup-project \"{apiProject}\" " +
-            $"--output-dir \"{entityDirectory}\" " +
-            $"--context-dir \"{contextDirectory}\" " +
-            $"--context MedicalDbContext " +
-            $"--force " +
-            $"--no-onconfiguring";
+            $"--output-dir \"{outputEntityDir}\" " +
+            $"--context-dir \"{outputContextDir}\" " +
+            "--context MedicalDbContext " +
+            (replaceAll ? "--force " : string.Empty) +
+            "--no-onconfiguring";
 
         Console.WriteLine("Executing EF Core Scaffold...");
         Console.WriteLine();
@@ -198,6 +231,48 @@ public class ScaffoldService
         }
 
         // -------------------------------------------------
+        // If not replaceAll, selectively copy generated files from temp to project
+        // -------------------------------------------------
+
+        if (!replaceAll)
+        {
+            try
+            {
+                Console.WriteLine();
+                Console.WriteLine("Applying selective updates from temporary scaffold output...");
+
+                // Copy entity files: add new files and overwrite only when content differs
+                if (Directory.Exists(outputEntityDir))
+                {
+                    CopyFilesSelective(outputEntityDir, entityDirectory);
+                }
+
+                // For DbContext files: if context does not exist in target, copy it. Do not overwrite existing context by default.
+                if (Directory.Exists(outputContextDir))
+                {
+                    CopyContextIfMissing(outputContextDir, contextDirectory);
+                }
+
+                Console.WriteLine("Selective update completed.");
+            }
+            finally
+            {
+                // Clean up temp folder
+                try
+                {
+                    if (Directory.Exists(tempRoot))
+                    {
+                        Directory.Delete(tempRoot, true);
+                    }
+                }
+                catch
+                {
+                    // ignore cleanup failures
+                }
+            }
+        }
+
+        // -------------------------------------------------
         // Success
         // -------------------------------------------------
 
@@ -214,6 +289,65 @@ public class ScaffoldService
 
         Console.WriteLine("DbContext generated at:");
         Console.WriteLine(contextDirectory);
+    }
+
+    private static void CopyFilesSelective(string sourceDir, string targetDir)
+    {
+        foreach (var sourceFile in Directory.EnumerateFiles(sourceDir, "*.cs", SearchOption.AllDirectories))
+        {
+            var relative = Path.GetRelativePath(sourceDir, sourceFile);
+            var destFile = Path.Combine(targetDir, relative);
+            var destDir = Path.GetDirectoryName(destFile);
+            if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
+            {
+                Directory.CreateDirectory(destDir);
+            }
+
+            if (!File.Exists(destFile))
+            {
+                File.Copy(sourceFile, destFile);
+                Console.WriteLine($"Added: {relative}");
+            }
+            else
+            {
+                // Compare contents; if different, overwrite
+                var srcBytes = File.ReadAllBytes(sourceFile);
+                var dstBytes = File.ReadAllBytes(destFile);
+                if (!srcBytes.SequenceEqual(dstBytes))
+                {
+                    File.Copy(sourceFile, destFile, true);
+                    Console.WriteLine($"Updated: {relative}");
+                }
+                else
+                {
+                    // identical, skip
+                }
+            }
+        }
+    }
+
+    private static void CopyContextIfMissing(string sourceContextDir, string targetContextDir)
+    {
+        foreach (var sourceFile in Directory.EnumerateFiles(sourceContextDir, "*.cs", SearchOption.AllDirectories))
+        {
+            var relative = Path.GetRelativePath(sourceContextDir, sourceFile);
+            var destFile = Path.Combine(targetContextDir, relative);
+            var destDir = Path.GetDirectoryName(destFile);
+            if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
+            {
+                Directory.CreateDirectory(destDir);
+            }
+
+            if (!File.Exists(destFile))
+            {
+                File.Copy(sourceFile, destFile);
+                Console.WriteLine($"Context file added: {relative}");
+            }
+            else
+            {
+                Console.WriteLine($"Context file exists, skipping overwrite: {relative}");
+            }
+        }
     }
 
     // -------------------------------------------------

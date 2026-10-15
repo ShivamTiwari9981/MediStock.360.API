@@ -29,12 +29,15 @@ namespace MediStock360.Infrastructure.Repositories
         public IGenericRepository<Store> StoreRepository { get; }
         public IGenericRepository<StoreUserMap> StoreUserMapRepository { get; }
         public IGenericRepository<SubscriptionPlan> SubscriptionPlanRepository { get; }
+        public IGenericRepository<ClientPayment> ClientPaymentRepository { get; }
+        public IGenericRepository<PaymentConfiguration> PaymentConfigurationRepository { get; }
         public IGenericRepository<UserOtp> UserOtpRepository { get; }
         public IGenericRepository<NotificationTemplate> NotificationTemplateRepository { get; }
         public IGenericRepository<AppSetting> AppSettingRepository { get; }
         public IGenericRepository<DatabaseVersion> DatabaseVersionRepository { get; }
         public IGenericRepository<MasterCodeGeneration> MasterCodeGenerationRepository { get; }
         public IGenericRepository<RolePermission> RolePermissionRepository { get; }
+        public IGenericRepository<ClientAppSetting> ClientAppSettingRepository { get; }
         public UnitOfWork(MedicalDbContext context,ICurrentUserService currentUser)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -47,6 +50,8 @@ namespace MediStock360.Infrastructure.Repositories
             BusinessTypeRepository = new GenericRepository<BusinessType>(_context, _currentService);
             CityRepository = new GenericRepository<City>(_context, _currentService);
             ClientSubscriptionRepository = new GenericRepository<ClientSubscription>(_context, _currentService);
+            ClientPaymentRepository = new GenericRepository<ClientPayment>(_context, _currentService);
+            PaymentConfigurationRepository = new GenericRepository<PaymentConfiguration>(_context, _currentService);
             CountryRepository = new GenericRepository<Country>(_context, _currentService);
             IsSyncDataRepository = new GenericRepository<IsSyncDatum>(_context, _currentService);
             MenuRepository = new GenericRepository<Menu>(_context, _currentService);
@@ -60,6 +65,7 @@ namespace MediStock360.Infrastructure.Repositories
             AppSettingRepository = new GenericRepository<AppSetting>(_context, _currentService);
             DatabaseVersionRepository = new GenericRepository<DatabaseVersion>(_context, _currentService);
             MasterCodeGenerationRepository = new GenericRepository<MasterCodeGeneration>(_context, _currentService);
+            ClientAppSettingRepository = new GenericRepository<ClientAppSetting>(_context, _currentService);
         }
 
         public async Task<bool> SaveChangesAsync()

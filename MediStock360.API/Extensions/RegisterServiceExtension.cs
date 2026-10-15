@@ -30,6 +30,10 @@ namespace MediStock360.API.Extensions
             services.AddScoped<IStoreService, StoreService>();
             services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IProductOwnerService, ProductOwnerService>();
+            services.AddHttpClient();
+            //services.AddScoped<ITelegramBotService, TelegramBotService>();
+            services.AddHttpClient<ITelegramBotService, TelegramBotService>();
             //services.AddScoped<IEmployeeService, EmployeeService>();
             //services.AddScoped<ILeaveService, LeaveService>();
             
@@ -49,6 +53,9 @@ namespace MediStock360.API.Extensions
 
             services.Configure<EmailSettings>(
                 configuration.GetSection("EmailSettings"));
+
+            services.Configure<TelegramSettings>(
+                configuration.GetSection("TelegramSettings"));
 
             //services.Configure<RedisSettings>(
             //configuration.GetSection("JWTConnectionStrings"));
