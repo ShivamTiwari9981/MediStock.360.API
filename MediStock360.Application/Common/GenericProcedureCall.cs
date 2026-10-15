@@ -18,12 +18,8 @@ namespace MediStock360.Application.Common
             public const string Sp_Login = "Sp_Login";
             public const string Sp_UpdateClient = "Sp_UpdateClient";
             public const string Sp_AddStore = "SP_AddStore";
-
-            public const string sp_AddEmployee = "sp_AddEmployee";
-            public const string Sp_EmployeeSalary = "Sp_EmployeeSalary";
-            public const string SP_Add_User = "SP_Add_User";
-            public const string sp_GetEmployees = "sp_GetEmployees";
-            public const string sp_LoadEmployeeDropdown = "sp_LoadEmployeeDropdown";
+            public const string Sp_GetSubscriptionPlans = "Sp_GetSubscriptionPlans";
+            public const string Sp_PaymentMethodes = "Sp_PaymentMethodes";
         }
         #endregion
 

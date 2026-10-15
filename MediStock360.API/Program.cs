@@ -89,6 +89,7 @@ namespace MediStock360.API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            app.UseStaticFiles();
             app.UseCors("AllowAngular");
 
             // Configure the HTTP request pipeline.

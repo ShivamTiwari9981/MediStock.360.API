@@ -28,8 +28,8 @@ namespace MediStock360.API.Extensions
             services.AddScoped<IMasterService, MasterService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IStoreService, StoreService>();
-            //services.AddScoped<IDepartmentService, DepartmentService>();
-            //services.AddScoped<IDesignationService, DesignationService>();
+            services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             //services.AddScoped<IEmployeeService, EmployeeService>();
             //services.AddScoped<ILeaveService, LeaveService>();
             

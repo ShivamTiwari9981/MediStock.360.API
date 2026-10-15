@@ -19,31 +19,11 @@ public partial class SubscriptionPlan
 
     public string CurrencyCode { get; set; } = null!;
 
-    public int MaxStores { get; set; }
-
-    public int MaxUsers { get; set; }
-
-    public int? MaxProducts { get; set; }
-
-    public int? MaxInvoicesPerMonth { get; set; }
-
-    public int? MaxCustomers { get; set; }
-
-    public int? MaxSuppliers { get; set; }
-
-    public bool IsInventoryEnabled { get; set; }
-
-    public bool IsPurchaseEnabled { get; set; }
-
-    public bool IsSalesEnabled { get; set; }
-
-    public bool IsReportsEnabled { get; set; }
-
-    public bool IsAienabled { get; set; }
+    public int? TrialDays { get; set; }
 
     public bool IsActive { get; set; }
 
-    public bool? IsSynced { get; set; }
+    public bool IsSynced { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
@@ -53,5 +33,5 @@ public partial class SubscriptionPlan
 
     public long? UpdatedBy { get; set; }
 
-    public virtual ICollection<ClientSubscription> ClientSubscriptions { get; set; } = new List<ClientSubscription>();
+    public virtual ICollection<SubscriptionPlanFeature> SubscriptionPlanFeatures { get; set; } = new List<SubscriptionPlanFeature>();
 }
