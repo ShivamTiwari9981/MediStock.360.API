@@ -8,6 +8,7 @@ namespace MediStock360.Application.Interfaces
     {
         Task<ApiResponse<string>> SignUpAsync(SignupRequestDto dto);
         Task<ApiResponse<LoginResponseDto>> LoginAsync(LoginRequestDto dto);
+        Task<ApiResponse<LoginResponseDto>> VerifyLoginOtpAsync(VerifyLoginOtpRequestDto dto);
         Task<ApiResponse<LoginResponseDto>> SwitchStoreAsync(SwitchStoreRequestDto dto);
         Task<ApiResponse<LoginResponseDto>> SwitchClientAsync(SwitchClientRequestDto dto);
         Task<ApiResponse<bool>> ResetPassword(string userEmail, string password);

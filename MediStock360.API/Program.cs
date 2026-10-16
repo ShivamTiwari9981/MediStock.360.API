@@ -11,7 +11,7 @@ namespace MediStock360.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<MedicalDbContext>(options =>
@@ -89,6 +89,22 @@ namespace MediStock360.API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            // Seed initial Product Owner, User, Role, and Internal Client on startup if not exists
+            using (var scope = app.Services.CreateScope())
+            {
+                try
+                {
+                    var seeder = scope.ServiceProvider.GetRequiredService<IDatabaseSeeder>();
+                    await seeder.SeedAsync();
+                }
+                catch (Exception ex)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred while seeding database during startup.");
+                }
+            }
+
             app.UseStaticFiles();
             app.UseCors("AllowAngular");
 
@@ -118,7 +134,7 @@ namespace MediStock360.API
 
             app.MapControllers();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

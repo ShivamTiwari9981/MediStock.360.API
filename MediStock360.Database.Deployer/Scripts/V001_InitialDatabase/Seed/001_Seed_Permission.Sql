@@ -14,9 +14,27 @@ DECLARE @Permissions TABLE (
 
 INSERT INTO @Permissions (PermissionCode, PermissionName, ModuleName, Description)
 VALUES
+-- Subscription Management
+('SUBSCRIPTION_PLAN_VIEW', 'View Subscription Plans','Subscriptions', 'Allows user to view subscription plans'),
+('SUBSCRIPTION_PLAN_CREATE', 'Create Subscription Plan','Subscriptions', 'Allows user to create subscription plans'),
+('SUBSCRIPTION_PLAN_EDIT', 'Edit Subscription Plan','Subscriptions', 'Allows user to edit subscription plans'),
+('SUBSCRIPTION_PLAN_MANAGE', 'Manage Subscription Plans','Subscriptions', 'Allows user to activate or deactivate plans'),
+('CLIENT_SUBSCRIPTION_VIEW', 'View Client Subscriptions','Subscriptions', 'Allows user to view client subscriptions'),
+('CLIENT_SUBSCRIPTION_ASSIGN', 'Assign Subscription','Subscriptions', 'Allows user to assign plans to clients'),
+('CLIENT_SUBSCRIPTION_RENEW', 'Renew Subscription','Subscriptions', 'Allows user to renew client subscriptions'),
+('CLIENT_SUBSCRIPTION_CANCEL', 'Cancel Subscription','Subscriptions', 'Allows user to cancel subscriptions'),
+
+-- Payment Management
+('PAYMENT_VIEW', 'View Payments','Payments', 'Allows user to view payment records'),
+('PAYMENT_VERIFY', 'Verify Payments','Payments', 'Allows user to verify payment references'),
+('PAYMENT_APPROVE', 'Approve Payments','Payments', 'Allows user to approve client payments'),
+('PAYMENT_REJECT', 'Reject Payments','Payments', 'Allows user to reject client payments'),
+
+-- System Administration
+('SYSTEM_SETTING_MANAGE', 'Manage System Settings','Settings', 'Allows user to manage system-level settings'),
+('AUDIT_LOG_VIEW', 'View Audit Logs','Administration', 'Allows user to view audit history'),
 -- Dashboard
 ('DASHBOARD_VIEW', 'View Dashboard', 'Dashboard', 'Allows user to view executive dashboard'),
-
 -- Administration
 ('ADMIN_VIEW', 'View Administration', 'Administration', 'Allows user to view administration menu'),
 ('CLIENT_VIEW', 'View Client', 'Administration', 'Allows user to view client information'),

@@ -21,7 +21,9 @@ namespace MediStock360.Application.DTOs.ResponseDto
         public List<RoleResponseDto> Roles { get; set; } = new();
         public List<string> Role { get; set; } = new();
         public List<string> Permissions { get; set; } = new();
-        public UserResponseDto User { get; set; } = null!;
+        public UserResponseDto? User { get; set; }
+        public bool RequiresOtp { get; set; } = false;
+        public string? OtpEmail { get; set; }
     }
 
     public class LoginUserInfoDto
