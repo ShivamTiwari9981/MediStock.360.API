@@ -42,6 +42,4 @@ public partial class ClientSubscription
     public long? UpdatedBy { get; set; }
 
     public virtual Client Client { get; set; } = null!;
-
-    public virtual SubscriptionPlan SubscriptionPlan { get; set; } = null!;
 }

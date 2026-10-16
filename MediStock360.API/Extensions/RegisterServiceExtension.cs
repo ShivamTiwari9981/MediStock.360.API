@@ -6,6 +6,7 @@ using MediStock360.Application.Interfaces;
 using MediStock360.Application.Services;
 using MediStock360.Domain.Interfaces;
 using MediStock360.Infrastructure.Interfaces;
+using MediStock360.Infrastructure.Persistence;
 using MediStock360.Infrastructure.Repositories;
 
 namespace MediStock360.API.Extensions
@@ -28,8 +29,13 @@ namespace MediStock360.API.Extensions
             services.AddScoped<IMasterService, MasterService>();
             services.AddScoped<IClientService, ClientService>();
             services.AddScoped<IStoreService, StoreService>();
-            //services.AddScoped<IDepartmentService, DepartmentService>();
-            //services.AddScoped<IDesignationService, DesignationService>();
+            services.AddScoped<ISubscriptionPlanService, SubscriptionPlanService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IProductOwnerService, ProductOwnerService>();
+            services.AddScoped<IDatabaseSeeder, DatabaseSeeder>();
+            services.AddHttpClient();
+            //services.AddScoped<ITelegramBotService, TelegramBotService>();
+            services.AddHttpClient<ITelegramBotService, TelegramBotService>();
             //services.AddScoped<IEmployeeService, EmployeeService>();
             //services.AddScoped<ILeaveService, LeaveService>();
             
@@ -49,6 +55,15 @@ namespace MediStock360.API.Extensions
 
             services.Configure<EmailSettings>(
                 configuration.GetSection("EmailSettings"));
+
+            services.Configure<TelegramSettings>(
+                configuration.GetSection("TelegramSettings"));
+
+            services.Configure<ProductOwnerUserSeedSettings>(
+                configuration.GetSection("ProductOwnerUser"));
+
+            services.Configure<InternalClientSeedSettings>(
+                configuration.GetSection("InternalClient"));
 
             //services.Configure<RedisSettings>(
             //configuration.GetSection("JWTConnectionStrings"));

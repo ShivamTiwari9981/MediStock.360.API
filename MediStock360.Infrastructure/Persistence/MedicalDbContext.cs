@@ -22,6 +22,8 @@ public partial class MedicalDbContext : DbContext
 
     public virtual DbSet<ClientAppSetting> ClientAppSettings { get; set; }
 
+    public virtual DbSet<ClientPayment> ClientPayments { get; set; }
+
     public virtual DbSet<ClientSubscription> ClientSubscriptions { get; set; }
 
     public virtual DbSet<Country> Countries { get; set; }
@@ -35,6 +37,10 @@ public partial class MedicalDbContext : DbContext
     public virtual DbSet<Menu> Menus { get; set; }
 
     public virtual DbSet<NotificationTemplate> NotificationTemplates { get; set; }
+
+    public virtual DbSet<PaymentConfiguration> PaymentConfigurations { get; set; }
+
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
 
     public virtual DbSet<Permission> Permissions { get; set; }
 
@@ -50,7 +56,11 @@ public partial class MedicalDbContext : DbContext
 
     public virtual DbSet<StoreUserMap> StoreUserMaps { get; set; }
 
+    public virtual DbSet<SubscriptionFeature> SubscriptionFeatures { get; set; }
+
     public virtual DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
+    public virtual DbSet<SubscriptionPlanFeature> SubscriptionPlanFeatures { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -184,6 +194,23 @@ public partial class MedicalDbContext : DbContext
                 .HasConstraintName("FK_ClientAppSetting_Client");
         });
 
+        modelBuilder.Entity<ClientPayment>(entity =>
+        {
+            entity.ToTable("ClientPayment");
+
+            entity.Property(e => e.AdminRemarks).HasMaxLength(500);
+            entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.CurrencyCode)
+                .HasMaxLength(3)
+                .IsUnicode(false)
+                .HasDefaultValue("INR")
+                .IsFixedLength();
+            entity.Property(e => e.PaymentStatus).HasDefaultValue((byte)1);
+            entity.Property(e => e.SenderNotes).HasMaxLength(250);
+            entity.Property(e => e.SubmittedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.TransactionReference).HasMaxLength(150);
+        });
+
         modelBuilder.Entity<ClientSubscription>(entity =>
         {
             entity.ToTable("ClientSubscription");
@@ -207,11 +234,6 @@ public partial class MedicalDbContext : DbContext
                 .HasForeignKey(d => d.ClientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ClientSubscription_Client");
-
-            entity.HasOne(d => d.SubscriptionPlan).WithMany(p => p.ClientSubscriptions)
-                .HasForeignKey(d => d.SubscriptionPlanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_ClientSubscription_SubscriptionPlan");
         });
 
         modelBuilder.Entity<Country>(entity =>
@@ -306,6 +328,53 @@ public partial class MedicalDbContext : DbContext
             entity.Property(e => e.Subject).HasMaxLength(500);
             entity.Property(e => e.TemplateCode).HasMaxLength(100);
             entity.Property(e => e.TemplateName).HasMaxLength(200);
+        });
+
+        modelBuilder.Entity<PaymentConfiguration>(entity =>
+        {
+            entity.ToTable("PaymentConfiguration");
+
+            entity.HasIndex(e => e.ConfigurationCode, "UQ_PaymentConfiguration_Code").IsUnique();
+
+            entity.Property(e => e.AccountHolderName).HasMaxLength(200);
+            entity.Property(e => e.AccountNumber).HasMaxLength(50);
+            entity.Property(e => e.BadgeText).HasMaxLength(50);
+            entity.Property(e => e.BankName).HasMaxLength(150);
+            entity.Property(e => e.CollectionInstructions).HasMaxLength(500);
+            entity.Property(e => e.ConfigurationCode).HasMaxLength(50);
+            entity.Property(e => e.ConfigurationName).HasMaxLength(100);
+            entity.Property(e => e.ContactLabel).HasMaxLength(100);
+            entity.Property(e => e.ContactNumber).HasMaxLength(30);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.Ifsccode)
+                .HasMaxLength(20)
+                .HasColumnName("IFSCCode");
+            entity.Property(e => e.Instructions).HasMaxLength(500);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.PaymentModeLabel).HasMaxLength(100);
+            entity.Property(e => e.QrcodeUrl)
+                .HasMaxLength(500)
+                .HasColumnName("QRCodeUrl");
+            entity.Property(e => e.UpiId).HasMaxLength(150);
+            entity.Property(e => e.UpiNumber).HasMaxLength(30);
+
+            entity.HasOne(d => d.PaymentMethod).WithMany(p => p.PaymentConfigurations)
+                .HasForeignKey(d => d.PaymentMethodId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PaymentConfiguration_PaymentMethod");
+        });
+
+        modelBuilder.Entity<PaymentMethod>(entity =>
+        {
+            entity.ToTable("PaymentMethod");
+
+            entity.HasIndex(e => e.MethodCode, "UQ_PaymentMethod_MethodCode").IsUnique();
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.Description).HasMaxLength(250);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.MethodCode).HasMaxLength(50);
+            entity.Property(e => e.MethodName).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Permission>(entity =>
@@ -467,6 +536,19 @@ public partial class MedicalDbContext : DbContext
                 .HasConstraintName("FK_StoreUserMap_User");
         });
 
+        modelBuilder.Entity<SubscriptionFeature>(entity =>
+        {
+            entity.ToTable("SubscriptionFeature");
+
+            entity.HasIndex(e => e.FeatureCode, "UQ_SubscriptionFeature_FeatureCode").IsUnique();
+
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.DisplayTemplate).HasMaxLength(200);
+            entity.Property(e => e.FeatureCode).HasMaxLength(50);
+            entity.Property(e => e.FeatureName).HasMaxLength(100);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+        });
+
         modelBuilder.Entity<SubscriptionPlan>(entity =>
         {
             entity.ToTable("SubscriptionPlan");
@@ -481,15 +563,28 @@ public partial class MedicalDbContext : DbContext
                 .IsFixedLength();
             entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
-            entity.Property(e => e.IsAienabled).HasColumnName("IsAIEnabled");
-            entity.Property(e => e.IsInventoryEnabled).HasDefaultValue(true);
-            entity.Property(e => e.IsPurchaseEnabled).HasDefaultValue(true);
-            entity.Property(e => e.IsReportsEnabled).HasDefaultValue(true);
-            entity.Property(e => e.IsSalesEnabled).HasDefaultValue(true);
-            entity.Property(e => e.IsSynced).HasDefaultValue(false);
             entity.Property(e => e.PlanCode).HasMaxLength(50);
             entity.Property(e => e.PlanName).HasMaxLength(100);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
+        });
+
+        modelBuilder.Entity<SubscriptionPlanFeature>(entity =>
+        {
+            entity.ToTable("SubscriptionPlanFeature");
+
+            entity.HasIndex(e => new { e.SubscriptionPlanId, e.SubscriptionFeatureId }, "UQ_SubscriptionPlanFeature_Plan_Feature").IsUnique();
+
+            entity.Property(e => e.IsEnabled).HasDefaultValue(true);
+
+            entity.HasOne(d => d.SubscriptionFeature).WithMany(p => p.SubscriptionPlanFeatures)
+                .HasForeignKey(d => d.SubscriptionFeatureId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubscriptionPlanFeature_Feature");
+
+            entity.HasOne(d => d.SubscriptionPlan).WithMany(p => p.SubscriptionPlanFeatures)
+                .HasForeignKey(d => d.SubscriptionPlanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SubscriptionPlanFeature_Plan");
         });
 
         modelBuilder.Entity<User>(entity =>

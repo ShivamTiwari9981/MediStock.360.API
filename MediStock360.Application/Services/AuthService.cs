@@ -115,8 +115,7 @@ namespace MediStock360.Application.Services
         {
             try
             {
-                //var expiryMinutes = await _settingService.GetAppSettingValue(SettingKeys.OtpExpiryMinutes) ?? "10";
-                var expiryMinutes = "10";
+                var expiryMinutes = "60";
                 if (dto == null || string.IsNullOrWhiteSpace(dto.EmailOrUsername) || string.IsNullOrWhiteSpace(dto.Password))
                 {
                     return ApiResponse<LoginResponseDto>.Fail(1, "Email/Username and Password are required.");
@@ -157,6 +156,42 @@ namespace MediStock360.Application.Services
                 var activeStore = stores.FirstOrDefault(x => x.IsDefaultStore == true);
                 var permissionCodes = permissions.Select(x => x.PermissionCode);
 
+                // Check if user has Product Owner role
+                bool isProductOwner = roles.Any(r =>
+                    (r.RoleCode != null && (
+                        r.RoleCode.Equals("PRODUCT_OWNER", StringComparison.OrdinalIgnoreCase) ||
+                        r.RoleCode.Equals("Product_Owner", StringComparison.OrdinalIgnoreCase) ||
+                        r.RoleCode.Equals("SUPER_ADMIN", StringComparison.OrdinalIgnoreCase) ||
+                        r.RoleCode.Equals("SUPERADMIN", StringComparison.OrdinalIgnoreCase))) ||
+                    (r.RoleName != null && (
+                        r.RoleName.Equals("Product Owner", StringComparison.OrdinalIgnoreCase) ||
+                        r.RoleName.Equals("Product_Owner", StringComparison.OrdinalIgnoreCase) ||
+                        r.RoleName.Equals("Super Admin", StringComparison.OrdinalIgnoreCase))));
+
+                if (isProductOwner)
+                {
+                    // Product Owner requires Two-Factor Authentication: generate and dispatch OTP
+                    var otpResult = await _otpService.SendOtpAsync(user.Email, Enums.OtpPurpose.ProductOwner);
+                    if (!otpResult.IsSuccess)
+                    {
+                        return ApiResponse<LoginResponseDto>.Fail(1, $"Failed to send verification OTP: {otpResult.Message}");
+                    }
+
+                    var pendingOtpResponse = new LoginResponseDto
+                    {
+                        RequiresOtp = true,
+                        OtpEmail = user.Email,
+                        User = userResponse,
+                        Role = roles.Select(r => r.RoleName).ToList()
+                    };
+
+                    return ApiResponse<LoginResponseDto>.Success(
+                        pendingOtpResponse,
+                        $"A verification code (OTP) has been sent to your registered email ({user.Email}). Please enter it to access the dashboard."
+                    );
+                }
+
+                // Normal / Client user login: proceed directly without OTP
                 var tokenString = GenerateJwtToken(userResponse, client, activeStore, expiryMinutes, roles, permissionCodes);
 
                 var dynamicMenus = SortMenuTree.BuildMenuTree(menus);
@@ -164,25 +199,97 @@ namespace MediStock360.Application.Services
                 {
                     Token = tokenString,
                     TokenType = "Bearer",
-                    //ExpiresAt = expiresAt,
-                    //IsActive = isActive,
+                    RequiresOtp = false,
                     Client = client,
-                    OnboardingStep = client.OnboardingStep,
+                    OnboardingStep = client?.OnboardingStep ?? 1,
                     Stores = stores,
                     ActiveStore = activeStore,
                     Menus = dynamicMenus,
                     Role = roles.Select(r => r.RoleName).ToList(),
                     Permissions = permissionCodes.ToList(),
-                    IsOnboardingCompleted = client.IsOnboardingCompleted,
-                    User= userResponse,
+                    IsOnboardingCompleted = client?.IsOnboardingCompleted ?? true,
+                    User = userResponse,
                     BusinessType = businessTypes
                 };
                 return ApiResponse<LoginResponseDto>.Success(responseDto, "Login successful");
-                //return ApiResponse<LoginResponseDto>.Success(null, "Login successful");
             }
             catch (Exception ex)
             {
                 return ApiResponse<LoginResponseDto>.Fail(500, $"An error occurred during login: {ex.Message}");
+            }
+        }
+
+        public async Task<ApiResponse<LoginResponseDto>> VerifyLoginOtpAsync(VerifyLoginOtpRequestDto dto)
+        {
+            try
+            {
+                var expiryMinutes = "60";
+                if (dto == null || string.IsNullOrWhiteSpace(dto.EmailOrUsername) || string.IsNullOrWhiteSpace(dto.Otp))
+                {
+                    return ApiResponse<LoginResponseDto>.Fail(1, "Email/Username and OTP are required.");
+                }
+
+                var identifier = dto.EmailOrUsername.Trim();
+
+                // 1. Find user by Email or UserName
+                var user = await _unitOfWork.UserRepository.FirstOrDefaultAsync(
+                    u => u.Email.ToLower() == identifier.ToLower() || u.UserName.ToLower() == identifier.ToLower()
+                );
+
+                if (user == null)
+                {
+                    return ApiResponse<LoginResponseDto>.Fail(1, "User not found with this identifier.");
+                }
+
+                // 2. Validate OTP
+                var otpVerifyResult = await _otpService.VerfyOtpAsync(user.Email, dto.Otp.Trim());
+                if (!otpVerifyResult.IsSuccess)
+                {
+                    return ApiResponse<LoginResponseDto>.Fail(1, otpVerifyResult.Message ?? "Invalid or expired OTP.");
+                }
+
+                // 3. Retrieve user session data via Sp_Login
+                var param = new List<SqlParameter>
+                {
+                    new SqlParameter("@ClientId", user.ClientId),
+                    new SqlParameter("@UserId", user.UserId),
+                };
+                var result = ExecuteStoredProcedure(StoredProcedure.Sp_Login, param, _unitOfWork.GetConnection());
+                var userResponse = CommonMethod.ConvertToList<UserResponseDto>(result.Tables[0]).FirstOrDefault();
+                var roles = CommonMethod.ConvertToList<RoleResponseDto>(result.Tables[1]);
+                var permissions = CommonMethod.ConvertToList<PermissionResponseDto>(result.Tables[2]);
+                var client = CommonMethod.ConvertToList<UserClientDto>(result.Tables[3]).FirstOrDefault();
+                var stores = CommonMethod.ConvertToList<StoreResponseDto>(result.Tables[4]);
+                var menus = CommonMethod.ConvertToList<MenuResponseDto>(result.Tables[5]);
+                var businessTypes = CommonMethod.ConvertToList<BusinessTypeResponseDto>(result.Tables[6]);
+                var activeStore = stores.FirstOrDefault(x => x.IsDefaultStore == true);
+                var permissionCodes = permissions.Select(x => x.PermissionCode);
+
+                var tokenString = GenerateJwtToken(userResponse, client, activeStore, expiryMinutes, roles, permissionCodes);
+
+                var dynamicMenus = SortMenuTree.BuildMenuTree(menus);
+                var responseDto = new LoginResponseDto
+                {
+                    Token = tokenString,
+                    TokenType = "Bearer",
+                    RequiresOtp = false,
+                    Client = client,
+                    OnboardingStep = client?.OnboardingStep ?? 1,
+                    Stores = stores,
+                    ActiveStore = activeStore,
+                    Menus = dynamicMenus,
+                    Role = roles.Select(r => r.RoleName).ToList(),
+                    Permissions = permissionCodes.ToList(),
+                    IsOnboardingCompleted = client?.IsOnboardingCompleted ?? true,
+                    User = userResponse,
+                    BusinessType = businessTypes
+                };
+
+                return ApiResponse<LoginResponseDto>.Success(responseDto, "OTP verified successfully. Welcome to Product Owner Dashboard.");
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<LoginResponseDto>.Fail(500, $"An error occurred during OTP verification: {ex.Message}");
             }
         }
 

@@ -124,6 +124,20 @@ namespace MediStock360.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost("verify-login-otp")]
+        public async Task<IActionResult> VerifyLoginOtp([FromBody] VerifyLoginOtpRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var result = await _authService.VerifyLoginOtpAsync(dto);
+
+            if (!result.IsSuccess)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
         [HttpPost("resend-otp")]
         public async Task<IActionResult> ResendOTP([FromBody] OtpResendRequest dto)
         {

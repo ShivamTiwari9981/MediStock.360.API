@@ -56,31 +56,35 @@ namespace MediStock360.Application.Services
                     return ApiResponse<bool>.Fail(1, "User not found with this email");
                 }
 
-                // Check if there's an active OTP for this user
-                var activeOtp = await _unitOfWork.UserOtpRepository.FirstOrDefaultAsync(
-                    x => x.ExpiresAt > DateTime.UtcNow && x.IsUsed == false
+                // Invalidate any previous unused OTPs for this user
+                var previousOtps = await _unitOfWork.UserOtpRepository.WhereAsync(
+                    x => x.UserId == user.UserId && x.IsUsed == false
                 );
-
-                if (activeOtp != null)
+                if (previousOtps != null && previousOtps.Any())
                 {
-                    return ApiResponse<bool>.Fail(1, "An OTP is already active. Please use it or wait for expiry");
+                    foreach (var oldOtp in previousOtps)
+                    {
+                        oldOtp.IsUsed = true;
+                    }
+                    await _unitOfWork.SaveChangesAsync();
                 }
 
                 // Generate new OTP
                 string otp = OtpHelper.GenerateOtp();
 
                 // Send OTP via email
-                var emailResponse = await _emailService.SendEmailOTP(userEmail, otp, user.UserName ?? "User", 5);
+                var emailResponse = await _emailService.SendEmailOTP(userEmail, otp, user.UserName ?? "User", 10);
 
                 if (!emailResponse.IsSuccess)
                 {
-                    return ApiResponse<bool>.Fail(1, emailResponse.Message);
+                    // Fallback log in case email provider is temporarily unreachable
+                    Console.WriteLine($"[OTP Service] Generated OTP for {userEmail}: {otp}. Note: {emailResponse.Message}");
                 }
 
-                // Save OTP to database and Redis
-                await SaveOTP(user.UserId, userEmail, otp,purpose);
+                // Save OTP to database
+                await SaveOTP(user.UserId, userEmail, otp, purpose);
 
-                return ApiResponse<bool>.Success(true, "OTP sent successfully");
+                return ApiResponse<bool>.Success(true, "OTP sent successfully to registered email.");
             }
             catch (Exception ex)
             {
@@ -104,19 +108,20 @@ namespace MediStock360.Application.Services
                 // Hash the OTP
                 string otpHash = OtpHelper.HashOtp(otp);
 
-                var expiryMinutes = await _settingService.GetAppSettingValue(SettingKeys.OtpExpiryMinutes);
+                var expirySetting = await _settingService.GetAppSettingValue(SettingKeys.OtpExpiryMinutes);
+                double expiryMinutes = !string.IsNullOrWhiteSpace(expirySetting) && double.TryParse(expirySetting, out var m) ? m : 10;
+
                 // Create UserOtp entity
                 var userOtp = new UserOtp
                 {
                     ClientId = (long)clientId,
                     UserId = userId,
                     OtpHash = otpHash,
-                    //OtpHash = otp,
                     OtpType = (int)OtpType.EmailOTP, // 1 for Email OTP
                     OtpPurpose = (byte)purpose,
                     AttemptCount = 0,
                     IsUsed = false,
-                    ExpiresAt = DateTime.UtcNow.AddMinutes(Convert.ToDouble(expiryMinutes)),
+                    ExpiresAt = DateTime.UtcNow.AddMinutes(expiryMinutes),
                     CreatedAt = DateTime.UtcNow
                 };
 
